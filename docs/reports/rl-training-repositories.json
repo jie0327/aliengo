@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-11",
+  "repositories": [
+    {
+      "path": "references/legged_gym",
+      "url": "https://github.com/leggedrobotics/legged_gym.git",
+      "requested_ref": "master",
+      "commit": "8fa29acc6fd1910c3d9659eef6310bdd301cde0a",
+      "role": "原始四足RL环境源码阅读；该提交未注册AlienGo，不安装运行时",
+      "sparse_paths": [
+        "legged_gym",
+        "licenses"
+      ],
+      "license": "BSD-3-Clause",
+      "license_file": "references/legged_gym/LICENSE",
+      "download_method": "git shallow clone --depth 1; detached HEAD; --filter=blob:none --sparse",
+      "python_package_installed": false,
+      "asset_license_directory": "references/legged_gym/licenses/assets"
+    },
+    {
+      "path": "references/legubiao_legged_gym",
+      "url": "https://github.com/legubiao/legged_gym.git",
+      "requested_ref": "master",
+      "commit": "e91e7b346cfcf6b3da12b02a58c0bdf0e6f482c5",
+      "role": "社区控制器作者的AlienGo训练参考，注册aliengo与aliengo_flat；旧栈未实跑",
+      "sparse_paths": [
+        "legged_gym",
+        "resources/unitree/aliengo",
+        "licenses"
+      ],
+      "license": "BSD-3-Clause",
+      "license_file": "references/legubiao_legged_gym/LICENSE",
+      "download_method": "git shallow clone --depth 1; detached HEAD; --filter=blob:none --sparse",
+      "python_package_installed": false,
+      "asset_license_directory": "references/legubiao_legged_gym/licenses/assets",
+      "asset_license_note": "根LICENSE要求查资产许可，但固定提交没有单独AlienGo资产许可证文件；未推定资产全部为BSD。"
+    },
+    {
+      "path": "references/rsl_rl_v1.0.2",
+      "url": "https://github.com/leggedrobotics/rsl_rl.git",
+      "requested_ref": "v1.0.2",
+      "commit": "2ad79cf0caa85b91721abfe358105f869a784121",
+      "role": "与固定旧legged_gym相配的PPO参考；不与当前rsl-rl-lib混用",
+      "license": "BSD-3-Clause",
+      "license_file": "references/rsl_rl_v1.0.2/LICENSE",
+      "download_method": "git shallow clone --depth 1; detached HEAD",
+      "python_package_installed": false
+    }
+  ],
+  "online_api_comparison": {
+    "url": "https://github.com/leggedrobotics/rsl_rl/blob/8945bdcbc364f388e14caebf547dbf302d89e491/rsl_rl/runners/on_policy_runner.py",
+    "requested_ref": "main",
+    "commit": "8945bdcbc364f388e14caebf547dbf302d89e491",
+    "downloaded": false,
+    "purpose": "源码确认当前runner与v1.0.2 API不同，不纳入旧训练运行环境"
+  },
+  "validation_status": {
+    "source_audit": "run on CPU without importing training frameworks",
+    "full_training": "not run",
+    "policy_evaluation": "not run",
+    "policy_export": "not run",
+    "sim2sim": "not run",
+    "robot_commands_sent": false
+  }
+}

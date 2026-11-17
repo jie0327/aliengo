@@ -1,0 +1,52 @@
+lio:
+  map:
+    save_map: true
+    if_filter: true
+    save_map_dir: "../../maps/current"
+    map_name: "depot.pcd"
+    ds_size: 0.15
+    save_interval: 10
+  ros:
+    lidar_topic: "/livox/lidar"
+    imu_topic: "/livox/imu"
+  sensor:
+    # 本地 SIM_SNAPSHOT 模式：同一时刻的 XYZ，逐点偏移全部为零。
+    # 官方真机 MID360 仍使用 lidar_type=1 的 Livox CustomMsg。
+    lidar_type: 8
+    blind: 1.0
+    maxrange: 60.0
+    filter_rate: 1
+    enable_downsample: true
+    voxel_fliter_size: 0.25
+    gravity_norm: 9.81
+    imu_type: 1
+    imu_na: 0.1
+    imu_ng: 0.1
+    imu_nba: 0.0001
+    imu_nbg: 0.0001
+  extrinsic:
+    # LiDAR 原点在 IMU 坐标系中的位置与旋转，取自当前静态安装模型。
+    lidar_imu: [-0.011, -0.02329, 0.04412,
+                 1.0, 0.0, 0.0,
+                 0.0, 1.0, 0.0,
+                 0.0, 0.0, 1.0]
+    odom_robo: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  hash_map:
+    hash_capacity: 200000
+    vox_resolution: 0.5
+  kf:
+    kf_type: 0
+    kf_max_iterations: 4
+    kf_align_gravity: true
+    kf_quit_eps: 0.001
+  output:
+    robot: false
+    plan_env_world: false
+    plan_env_body: false
+    ml_map: false
+    planner: false
+    map: true
+    dense: false
+    pub_step: 1
+  eva:
+    timer: true

@@ -1,0 +1,8 @@
+FROM aliengo-learning:noetic-lio
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libopencv-dev ros-noetic-cv-bridge ros-noetic-image-transport \
+    ros-noetic-eigen-conversions ros-noetic-cmake-modules \
+    fonts-noto-cjk fontconfig \
+    && fc-cache -f \
+    && rm -rf /var/lib/apt/lists/*

@@ -1,0 +1,244 @@
+--- basic/CMakeLists.txt
++++ basic/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+ set(CMAKE_BUILD_TYPE "Release")
+-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -pthread -fexceptions")
++set(CMAKE_CXX_FLAGS_RELEASE "-O2 -pthread -fexceptions")
+ 
+ 
+ find_package(catkin REQUIRED COMPONENTS
+--- super_lio/CMakeLists.txt
++++ super_lio/CMakeLists.txt
+@@ -9,7 +9,7 @@
+ 
+ set(CMAKE_BUILD_TYPE Release)
+ set(CMAKE_CXX_STANDARD 17)
+-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -pthread -fexceptions -flto=auto")
++set(CMAKE_CXX_FLAGS_RELEASE "-O2 -pthread -fexceptions")
+ add_definitions(-DROOT=\"${CMAKE_CURRENT_SOURCE_DIR}/\")
+ 
+ # Find packages
+@@ -63,6 +63,7 @@
+ 
+ # library build
+ add_library(lio ${LIO_LIB_SRC} ${LIO_LIB_HEADERS})
++add_dependencies(lio ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ 
+ # Target specific includes
+ target_include_directories(lio PUBLIC
+--- super_lio/include/common/ds.h
++++ super_lio/include/common/ds.h
+@@ -20,17 +20,20 @@
+   VELO32 = 4,
+   VEL_NCLT = 5,
+   LS16 = 6,
+-  OUSTER = 7
++  OUSTER = 7,
++  SIM_SNAPSHOT = 8
+ };
+ 
+-static const std::array<std::string, 7> LID_TYPE_NAMES = {
++static const std::array<std::string, 9> LID_TYPE_NAMES = {
+   "INVALID",
+   "LIVOX",
+   "HESAI16",
+   "VELO16",
+   "VELO32",
+   "VEL_NCLT",
+-  "LS16"
++  "LS16",
++  "OUSTER",
++  "SIM_SNAPSHOT"
+ };
+ 
+ 
+@@ -123,6 +126,7 @@
+ {
+   double start_time = 0.0;
+   double end_time = 0.0;
++  bool is_snapshot = false;
+   pcl::PointCloud<LI2Sup::PointXTZIT>::Ptr pc{nullptr};
+ };
+ 
+--- super_lio/src/apps/super_lio_node.cpp
++++ super_lio/src/apps/super_lio_node.cpp
+@@ -1,5 +1,6 @@
+ 
+ #include <csignal>
++#include <tbb/global_control.h>
+ #include <ros/ros.h>
+ #include "lio/super_lio.h"
+ #include "ros/ROSWrapper.h"
+@@ -9,9 +10,12 @@
+ 
+ void SigHandle(int sig) {
+   g_flag_run = false;
++  ros::requestShutdown();
+ }
+ 
+ int main(int argc, char** argv){
++  tbb::global_control parallelism_limit(
++      tbb::global_control::max_allowed_parallelism, 2);
+   ros::init(argc, argv, "lio");
+   signal(SIGINT, SigHandle);
+   ros::NodeHandle nh;
+--- super_lio/src/lio/super_lio.cpp
++++ super_lio/src/lio/super_lio.cpp
+@@ -359,6 +359,27 @@
+ 
+   static const M3 TLI_R = g_lidar_imu.R_;
+   static const V3 TLI_t = g_lidar_imu.t_;
++
++  if (measures_.lidar.is_snapshot) {
++    // IMU propagation above is unchanged. All points share the snapshot stamp.
++    // Convert LiDAR coordinates to IMU coordinates without temporal deskew.
++    const auto& raw_pc = measures_.lidar.pc;
++    scan_undistort_full_->resize(raw_pc->size());
++    tbb::parallel_for(
++        tbb::blocked_range<size_t>(0, raw_pc->size()),
++        [&](const tbb::blocked_range<size_t>& r) {
++          for (size_t idx = r.begin(); idx < r.end(); ++idx) {
++            const auto& point = raw_pc->points[idx];
++            auto& output = scan_undistort_full_->points[idx];
++            V3 transformed = TLI_R * V3(point.x, point.y, point.z) + TLI_t;
++            output.x = transformed[0];
++            output.y = transformed[1];
++            output.z = transformed[2];
++            output.intensity = point.intensity;
++          }
++        });
++    return;
++  }
+   const SE3 T_end = kf_->GetSE3();
+   const M3  R_inv = T_end.R_.transpose();
+   const V3  T_end_t = T_end.t_;
+--- super_lio/src/ros/ROSWrapper.cpp
++++ super_lio/src/ros/ROSWrapper.cpp
+@@ -211,9 +211,9 @@
+   pub_path_      = nh_.advertise<nav_msgs::Path>("/lio/path", 1);
+   pub_path_robot_ = nh_.advertise<sensor_msgs::PointCloud2>("/lio/path_robot", 1);
+   
+-  msg_path_point_.header.frame_id = "world";
+-  msg2uav_.header.frame_id = "world";
+-  path_.header.frame_id = "world";
++  msg_path_point_.header.frame_id = "lio_map";
++  msg2uav_.header.frame_id = "lio_map";
++  path_.header.frame_id = "lio_map";
+ }
+ 
+ 
+@@ -262,6 +262,22 @@
+ 
+   switch (g_lidar_type) {
+ 
++  case LID_TYPE::SIM_SNAPSHOT:
++  {
++    pcl::PointCloud<pcl::PointXYZ> pl_orig;
++    pcl::fromROSMsg(*msg, pl_orig);
++    lidar_data.pc->reserve(pl_orig.size() / g_filter_rate + 1);
++    lidar_data.start_time = msg->header.stamp.toSec();
++    lidar_data.end_time = lidar_data.start_time;
++    lidar_data.is_snapshot = true;
++    for (std::size_t i = 0; i < pl_orig.size(); i += g_filter_rate) {
++      const auto& pt = pl_orig.points[i];
++      if (!validPoint(pt.x, pt.y, pt.z)) continue;
++      lidar_data.pc->emplace_back(pt.x, pt.y, pt.z, 0.0f, 0.0);
++    }
++    if (lidar_data.pc->empty()) return;
++    break;
++  }
+   case LID_TYPE::HESAI16:
+   {
+     pcl::PointCloud<hesai_ros::Point> pl_orig;
+@@ -407,8 +423,8 @@
+ 
+     odom_imu.header.stamp = msg->header.stamp;
+     odom_robo.header.stamp = msg->header.stamp;
+-    odom_imu.header.frame_id = "world";
+-    odom_robo.header.frame_id = "world";
++    odom_imu.header.frame_id = "lio_map";
++    odom_robo.header.frame_id = "lio_map";
+     pub_imu_odom.publish(odom_imu);
+     pub_robo_odom.publish(odom_robo);
+   }
+@@ -456,7 +472,8 @@
+ 
+ void ROSWrapper::pub_odom(const NavState& state){
+   nav_msgs::Odometry odom;
+-  odom.header.frame_id = "world";
++  odom.header.frame_id = "lio_map";
++  odom.child_frame_id = "lio_imu";
+   odom.header.stamp = ros::Time().fromSec(state.timestamp);
+   odom.pose.pose.position.x = state.p[0];
+   odom.pose.pose.position.y = state.p[1];
+@@ -468,9 +485,11 @@
+   odom.pose.pose.orientation.z = temp_q[2];
+   odom.pose.pose.orientation.w = temp_q[3];
+ 
+-  odom.twist.twist.linear.x = state.v[0];
+-  odom.twist.twist.linear.y = state.v[1];
+-  odom.twist.twist.linear.z = state.v[2];
++  // Odometry twist is expressed in its child IMU frame.
++  const V3 velocity_imu = state.R.R_.transpose() * state.v;
++  odom.twist.twist.linear.x = velocity_imu[0];
++  odom.twist.twist.linear.y = velocity_imu[1];
++  odom.twist.twist.linear.z = velocity_imu[2];
+ 
+   pub_odom_.publish(odom);    // imu frame -> lidar frequency
+ 
+@@ -515,7 +534,7 @@
+     // path_point_.push_back(point_robot);
+     // pcl::toROSMsg(path_point_, msg_path_point_);
+     // msg_path_point_.header.stamp = odom.header.stamp;
+-    // msg_path_point_.header.frame_id = "world";
++    // msg_path_point_.header.frame_id = "lio_map";
+     // pub_path_robot_.publish(msg_path_point_);
+ 
+     last_path_point_ = robo_position;
+@@ -529,7 +548,7 @@
+   // q.setZ(temp_q[2]);
+   // q.setW(temp_q[3]);
+   // transform.setRotation(q);
+-  // br_.sendTransform(tf::StampedTransform(transform, odom.header.stamp, "world", "body"));
++  // br_.sendTransform(tf::StampedTransform(transform, odom.header.stamp, "lio_map", "body"));
+ 
+   // // Visual: for the best field of view in rviz.
+   // q.setX(0);
+@@ -537,7 +556,7 @@
+   // q.setZ(0);
+   // q.setW(1);
+   // transform.setRotation(q);
+-  // br_.sendTransform(tf::StampedTransform(transform, odom.header.stamp, "world", "god"));
++  // br_.sendTransform(tf::StampedTransform(transform, odom.header.stamp, "lio_map", "god"));
+ }
+ 
+ 
+@@ -547,7 +566,7 @@
+                                             ("/lio/cloud_world", 10);
+   sensor_msgs::PointCloud2 cloud;
+   pcl::toROSMsg(*pc, cloud);
+-  cloud.header.frame_id = "world";
++  cloud.header.frame_id = "lio_map";
+   cloud.header.stamp = ros::Time().fromSec(time);
+   pub_cloud_world_.publish(cloud);
+ }
+@@ -558,7 +577,7 @@
+                                             ("/lio/robo/cloud_world", 10);
+   sensor_msgs::PointCloud2 cloud;
+   pcl::toROSMsg(*pc, cloud);
+-  cloud.header.frame_id = "world";
++  cloud.header.frame_id = "lio_map";
+   cloud.header.stamp = ros::Time().fromSec(time);
+   pub_cloud2robot_.publish(cloud);
+ }
+@@ -651,7 +670,7 @@
+ 
+ void ROSWrapper::set_global_map(const BASIC::CloudPtr& global_map){
+   pcl::toROSMsg(*global_map, global_map_msg_);
+-  global_map_msg_.header.frame_id = "world";
++  global_map_msg_.header.frame_id = "lio_map";
+ 
+   static ros::Publisher global_map_pub =
+     nh_.advertise<sensor_msgs::PointCloud2>("/lio/global_map", 1, true);

@@ -1,0 +1,375 @@
+--- a/gbplanner/include/gbplanner/rrg.h
++++ b/gbplanner/include/gbplanner/rrg.h
+@@ -358,6 +358,7 @@
+   void getBestViewpointAngles(StateVec state, std::vector<std::pair<StateVec, VolumetricGain>> &out_states);
+ 
+  private:
++  bool isOutputPathCollisionFree(const std::vector<geometry_msgs::Pose>& path);
+   bool sampleRandomState(StateVec& state);
+   bool sampleVertex(Vertex& vertex);
+   bool sampleVertex(RandomSampler& random_sampler, StateVec& root_state,
+--- a/gbplanner/src/rrg.cpp
++++ b/gbplanner/src/rrg.cpp
+@@ -883,10 +883,15 @@
+   // }
+   points_to_check.push_back(end_pt);
+ 
+-  // Collision check
+-  for(auto pt : points_to_check)
+-  {
+-    VoxelStatus vs = map_manager_->getBoxStatus(pt + robot_params_.center_offset, box_size, stop_at_unknown_voxel);
++  // Keep the official geometry dimensions and unknown-space policy. Check the
++  // translated body at the segment heading, including its front/back overhang.
++  for (size_t i = 1; i < points_to_check.size(); ++i) {
++    const Eigen::Vector3d start = points_to_check[i-1] + robot_params_.center_offset;
++    const Eigen::Vector3d end = points_to_check[i] + robot_params_.center_offset;
++    const Eigen::Vector3d delta = end-start;
++    if (delta.norm() < 1e-9) continue;
++    const double yaw = delta.head(2).norm() > 1e-9 ? std::atan2(delta.y(), delta.x()) : current_state_[3];
++    VoxelStatus vs = map_manager_->getPathStatusAtYaw(start, end, box_size, yaw, stop_at_unknown_voxel);
+     if (vs == VoxelStatus::kOccupied) {
+       admissible = false;
+       return ProjectedEdgeStatus::kOccipied;
+@@ -5045,6 +5050,32 @@
+   return false;
+ }
+ 
++bool Rrg::isOutputPathCollisionFree(const std::vector<geometry_msgs::Pose>& path) {
++  if (path.empty()) return false;
++  double yaw = current_state_[3];
++  for (size_t i = 0; i < path.size(); ++i) {
++    const auto& a = path[i == 0 ? 0 : i-1].position;
++    const auto& b = path[i].position;
++    Eigen::Vector3d start(a.x, a.y, a.z), end(b.x, b.y, b.z);
++    const Eigen::Vector3d delta = end-start;
++    const double heading = delta.head(2).norm() > 1e-9 ? std::atan2(delta.y(), delta.x()) : yaw;
++    if (map_manager_->getRotatingBoxStatus(start + robot_params_.center_offset,
++            robot_box_size_, yaw, heading, true) != VoxelStatus::kFree) return false;
++    const Eigen::Vector3d overshoot = delta.norm() > 1e-9
++        ? Eigen::Vector3d(delta.normalized()*planning_params_.edge_overshoot)
++        : Eigen::Vector3d::Zero();
++    if (map_manager_->getPathStatusAtYaw(start + robot_params_.center_offset - overshoot,
++            end + robot_params_.center_offset + overshoot, robot_box_size_, heading, true)
++            != VoxelStatus::kFree) return false;
++    yaw = heading;
++  }
++  // The follower aligns to the terminal yaw, including a stationary turn.
++  const auto& last = path.back();
++  return map_manager_->getRotatingBoxStatus(
++      Eigen::Vector3d(last.position.x, last.position.y, last.position.z) + robot_params_.center_offset,
++      robot_box_size_, yaw, tf::getYaw(last.orientation), true) == VoxelStatus::kFree;
++}
++
+ std::vector<geometry_msgs::Pose> Rrg::getBestPathSimplified()
+ {
+   std::vector<geometry_msgs::Pose> ret, empty_path;
+@@ -5098,14 +5129,14 @@
+ 
+     // ERROR: Re-confirm this is a safe path.
+     Eigen::Vector3d p_overshoot =
+-        dir_vec.normalized() * planning_params_.edge_overshoot;
++        (dir_vec.norm() > 1e-9 ? Eigen::Vector3d(dir_vec.normalized() * planning_params_.edge_overshoot) : Eigen::Vector3d::Zero());
+     Eigen::Vector3d p_start = p0 + robot_params_.center_offset - p_overshoot;
+     Eigen::Vector3d p_end =
+         p0 + robot_params_.center_offset + dir_vec + p_overshoot;
+-    if ((dir_vec.norm() > 0) &&
+-        (VoxelStatus::kFree !=
+-         map_manager_->getPathStatus(p_start, p_end, robot_box_size_, true))) {
+-      ROS_INFO_COND(global_verbosity >= Verbosity::DEBUG, "Segment [%d] is not clear.", i);
++    if (dir_vec.norm() > 1e-9 && VoxelStatus::kFree != map_manager_->getPathStatus(
++            p_start, p_end, robot_box_size_, true)) {
++      ROS_WARN("Rejecting path: segment [%d] is not clear.", i);
++      return empty_path;
+     }
+ 
+     tf::Quaternion quat;
+@@ -5154,7 +5185,6 @@
+     std::vector<geometry_msgs::Pose> mod_path;
+     if (improveFreePath(ret, mod_path, false)) {
+       ret = mod_path;
+-      addRefPathToGraph(global_graph_, mod_path);
+       path_added = true;
+     }
+     double dmod_time = GET_ELAPSED_TIME(mod_time);
+@@ -5162,9 +5192,6 @@
+     visualization_->visualizeModPath(mod_path);
+   }
+ 
+-  if (!path_added) {
+-    addRefPathToGraph(global_graph_, ref_vertices);
+-  }
+ 
+   // Interpolate path
+   if(planning_params_.path_interpolation_distance > 0.0) {
+@@ -5175,6 +5202,15 @@
+       ret = interp_path;
+     }
+   }
++
++  // Validate the final actual turn and translation geometry before output or
++  // global-graph insertion. No added footprint, margin or controller gate.
++  if (!isOutputPathCollisionFree(ret)) {
++    ROS_WARN("Rejecting final output: body turn or path segment is not clear.");
++    return empty_path;
++  }
++  if (path_added) addRefPathToGraph(global_graph_, ret);
++  else addRefPathToGraph(global_graph_, ref_vertices);
+ 
+   visualization_->visualizeRefPath(ret);
+ 
+@@ -5318,14 +5354,14 @@
+ 
+     // ERROR: Re-confirm this is a safe path.
+     Eigen::Vector3d p_overshoot =
+-        dir_vec.normalized() * planning_params_.edge_overshoot;
++        (dir_vec.norm() > 1e-9 ? Eigen::Vector3d(dir_vec.normalized() * planning_params_.edge_overshoot) : Eigen::Vector3d::Zero());
+     Eigen::Vector3d p_start = p0 + robot_params_.center_offset - p_overshoot;
+     Eigen::Vector3d p_end =
+         p0 + robot_params_.center_offset + dir_vec + p_overshoot;
+-    if ((dir_vec.norm() > 0) &&
+-        (VoxelStatus::kFree !=
+-         map_manager_->getPathStatus(p_start, p_end, robot_box_size_, true))) {
+-      ROS_INFO_COND(global_verbosity >= Verbosity::DEBUG, "Segment [%d] is not clear.", i);
++    if (dir_vec.norm() > 1e-9 && VoxelStatus::kFree != map_manager_->getPathStatus(
++            p_start, p_end, robot_box_size_, true)) {
++      ROS_WARN("Rejecting path: segment [%d] is not clear.", i);
++      return empty_path;
+     }
+ 
+     tf::Quaternion quat;
+@@ -5374,15 +5410,11 @@
+     std::vector<geometry_msgs::Pose> mod_path;
+     if (improveFreePath(ret, mod_path, false)) {
+       ret = mod_path;
+-      addRefPathToGraph(global_graph_, mod_path);
+       path_added = true;
+     }
+     double dmod_time = GET_ELAPSED_TIME(mod_time);
+     ROS_WARN_COND(global_verbosity >= Verbosity::WARN, "Compute an aternate path in %f(s)", dmod_time);
+     visualization_->visualizeModPath(mod_path);
+-  }
+-  if (!path_added) {
+-    addRefPathToGraph(global_graph_, ref_vertices);
+   }
+ 
+   // Interpolate path
+@@ -5394,6 +5426,15 @@
+       ret = interp_path;
+     }
+   }
++
++  // Validate the final actual turn and translation geometry before output or
++  // global-graph insertion. No added footprint, margin or controller gate.
++  if (!isOutputPathCollisionFree(ret)) {
++    ROS_WARN("Rejecting final output: body turn or path segment is not clear.");
++    return empty_path;
++  }
++  if (path_added) addRefPathToGraph(global_graph_, ret);
++  else addRefPathToGraph(global_graph_, ref_vertices);
+ 
+   visualization_->visualizeRefPath(ret);
+ 
+--- a/map_manager/include/map_manager/map_manager.h
++++ b/map_manager/include/map_manager/map_manager.h
+@@ -35,6 +35,10 @@
+                                     const Eigen::Vector3d& end,
+                                     const Eigen::Vector3d& box_size,
+                                     bool stop_at_unknown_voxel);
++  VoxelStatus getPathStatusAtYaw(const Eigen::Vector3d& start, const Eigen::Vector3d& end,
++                                const Eigen::Vector3d& size, double yaw, bool stop_at_unknown);
++  VoxelStatus getRotatingBoxStatus(const Eigen::Vector3d& center, const Eigen::Vector3d& size,
++                                  double from_yaw, double to_yaw, bool stop_at_unknown);
+   bool augmentFreeBox(const Eigen::Vector3d& position,
+                               const Eigen::Vector3d& box_size);
+ 
+--- a/map_manager/include/map_manager/map_manager_voxblox_impl.h
++++ b/map_manager/include/map_manager/map_manager_voxblox_impl.h
+@@ -142,6 +142,11 @@
+                            const Eigen::Vector3d& size,
+                            bool stop_at_unknown_voxel);
+ 
++  VoxelStatus getPathStatusAtYaw(const Eigen::Vector3d& start, const Eigen::Vector3d& end,
++                                const Eigen::Vector3d& size, double yaw, bool stop_at_unknown);
++  VoxelStatus getRotatingBoxStatus(const Eigen::Vector3d& center, const Eigen::Vector3d& size,
++                                  double from_yaw, double to_yaw, bool stop_at_unknown);
++
+   float getVoxelDistance(const Eigen::Vector3d& center);
+   double getPointDistance(const Eigen::Vector3d& point);
+   Eigen::Vector3d getPointGradient(const Eigen::Vector3d& point);
+@@ -216,6 +221,11 @@
+   void getCameraScanStatus(StateVec& state, SensorParamsBase& sensor_params, std::vector<VoxelLog> &out_logs);
+ 
+  private:
++  VoxelStatus getSweptBoxStatus(const Eigen::Vector3d& start,
++                               const Eigen::Vector3d& end,
++                               const Eigen::Vector3d& size,
++                               double yaw, bool stop_at_unknown_voxel);
++
+   VoxelStatus getBoxStatusInVoxels(
+       const voxblox::LongIndex& bounding_box_center,
+       const voxblox::AnyIndex& bounding_box_voxels,
+@@ -247,8 +257,9 @@
+   // than the robot radius to use this method No such restrictions for using
+   // ESDF
+   double robot_radius_;
+-  int box_status_method_;
+-  int line_status_method_;
++  int box_status_method_ = 0;
++  int line_status_method_ = 0;
++  bool collision_geometry_fix_ = false;
+ };
+ 
+ // Helper
+--- a/map_manager/src/map_manager.cpp
++++ b/map_manager/src/map_manager.cpp
+@@ -71,6 +71,16 @@
+                                   bool stop_at_unknown_voxel)
+ {
+   return map_manager_impl_->getPathStatus(start, end, box_size, stop_at_unknown_voxel);
++}
++
++VoxelStatus MapManager::getPathStatusAtYaw(const Eigen::Vector3d& start, const Eigen::Vector3d& end,
++    const Eigen::Vector3d& size, double yaw, bool stop_at_unknown) {
++  return map_manager_impl_->getPathStatusAtYaw(start, end, size, yaw, stop_at_unknown);
++}
++
++VoxelStatus MapManager::getRotatingBoxStatus(const Eigen::Vector3d& center, const Eigen::Vector3d& size,
++    double from_yaw, double to_yaw, bool stop_at_unknown) {
++  return map_manager_impl_->getRotatingBoxStatus(center, size, from_yaw, to_yaw, stop_at_unknown);
+ }
+ 
+ bool MapManager::augmentFreeBox(const Eigen::Vector3d& position,
+--- a/map_manager/src/voxblox/voxblox_common_impl.cpp
++++ b/map_manager/src/voxblox/voxblox_common_impl.cpp
+@@ -22,6 +22,8 @@
+   sdf_layer_ = getSDFLayer();
+   CHECK_NOTNULL(sdf_layer_);
+   interpolator_ = new voxblox::Interpolator<SDFVoxelType>(sdf_layer_);
++
++  nh_private.param("collision_geometry_fix", collision_geometry_fix_, false);
+ 
+   // Get local parameters from passed nodehandle
+   if (!nh_private.getParam("occupancy_distance_voxelsize_factor",
+--- a/map_manager/src/voxblox/voxblox_alt_impl.cpp
++++ b/map_manager/src/voxblox/voxblox_alt_impl.cpp
+@@ -1,9 +1,104 @@
+ #include "map_manager/map_manager_voxblox_impl.h"
++
++template <typename SDFServerType, typename SDFVoxelType>
++VoxelStatus MapManagerVoxblox<SDFServerType, SDFVoxelType>::getSweptBoxStatus(
++    const Eigen::Vector3d& start, const Eigen::Vector3d& end,
++    const Eigen::Vector3d& size, double yaw, bool stop_at_unknown_voxel) {
++  if (!start.allFinite() || !end.allFinite() || !size.allFinite() ||
++      !std::isfinite(yaw) || (size.array() < 0.).any()) return VoxelStatus::kUnknown;
++  const Eigen::Vector3d half = size / 2.;
++  const Eigen::Vector3d body_x(std::cos(yaw), std::sin(yaw), 0.);
++  const Eigen::Vector3d body_y(-std::sin(yaw), std::cos(yaw), 0.);
++  const Eigen::Vector3d extent = body_x.cwiseAbs()*half.x() + body_y.cwiseAbs()*half.y()
++                              + Eigen::Vector3d(0., 0., half.z());
++  const double resolution = getResolution();
++  const Eigen::Vector3d lower = start.cwiseMin(end) - extent;
++  const Eigen::Vector3d upper = start.cwiseMax(end) + extent;
++  const voxblox::LongIndex first = ((lower.array() - 1e-6) / resolution).floor().matrix().template cast<int64_t>();
++  const voxblox::LongIndex last = ((upper.array() + 1e-6) / resolution).floor().matrix().template cast<int64_t>();
++  const Eigen::Vector3d direction = end - start;
++  const Eigen::Vector3d axes[] = {Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(),
++                                Eigen::Vector3d::UnitZ(), body_x, body_y};
++  const double distance_thres = occupancy_distance_voxelsize_factor_ * resolution + 1e-6;
++  VoxelStatus result = VoxelStatus::kFree;
++  for (int64_t x = first.x(); x <= last.x(); ++x)
++    for (int64_t y = first.y(); y <= last.y(); ++y)
++      for (int64_t z = first.z(); z <= last.z(); ++z) {
++        const voxblox::LongIndex index(x, y, z);
++        const Eigen::Vector3d cell = (index.cast<double>().array() + .5).matrix() * resolution;
++        // Continuous separating-axis test: overlap intervals in translation
++        // time for the actual oriented body and voxel. Includes the interior,
++        // both end overhangs and stationary poses, without a clearance margin.
++        double enter = 0., leave = 1.;
++        bool intersects = true;
++        for (const auto& axis : axes) {
++          const double limit = std::abs(axis.dot(body_x))*half.x()
++              + std::abs(axis.dot(body_y))*half.y() + std::abs(axis.z())*half.z()
++              + .5*resolution*axis.cwiseAbs().sum() + 1e-6;
++          const double position = axis.dot(cell-start), velocity = axis.dot(direction);
++          if (std::abs(velocity) < 1e-12) {
++            if (std::abs(position) > limit) { intersects = false; break; }
++          } else {
++            double a = (position-limit)/velocity, b = (position+limit)/velocity;
++            if (a > b) std::swap(a, b);
++            enter = std::max(enter, a); leave = std::min(leave, b);
++            if (enter > leave) { intersects = false; break; }
++          }
++        }
++        if (!intersects) continue;
++        const auto* voxel = sdf_layer_->getVoxelPtrByGlobalIndex(index);
++        if (checkUnknownStatus(voxel)) {
++          if (stop_at_unknown_voxel) return VoxelStatus::kUnknown;
++          result = VoxelStatus::kUnknown;
++        } else if (voxel->distance <= distance_thres) return VoxelStatus::kOccupied;
++      }
++  return result;
++}
++
++template <typename SDFServerType, typename SDFVoxelType>
++VoxelStatus MapManagerVoxblox<SDFServerType, SDFVoxelType>::getPathStatusAtYaw(
++    const Eigen::Vector3d& start, const Eigen::Vector3d& end, const Eigen::Vector3d& size,
++    double yaw, bool stop_at_unknown) {
++  if (!collision_geometry_fix_) return getPathStatus(start, end, size, stop_at_unknown);
++  if (!start.allFinite() || !end.allFinite() || !size.allFinite() ||
++      !std::isfinite(yaw) || (size.array() < 0.).any()) return VoxelStatus::kUnknown;
++  const auto status = getSweptBoxStatus(start, end, size, yaw, stop_at_unknown);
++  // Preserve each official method's relaxed unknown-space semantics: methods
++  // 1/2/3 skip unknown when requested; method 0 propagates its box result.
++  if (!stop_at_unknown && line_status_method_ != 0 && status == VoxelStatus::kUnknown)
++    return VoxelStatus::kFree;
++  return status;
++}
++
++template <typename SDFServerType, typename SDFVoxelType>
++VoxelStatus MapManagerVoxblox<SDFServerType, SDFVoxelType>::getRotatingBoxStatus(
++    const Eigen::Vector3d& center, const Eigen::Vector3d& size,
++    double from_yaw, double to_yaw, bool stop_at_unknown) {
++  if (!collision_geometry_fix_) return getBoxStatus(center, size, stop_at_unknown);
++  if (!std::isfinite(from_yaw) || !std::isfinite(to_yaw)) return VoxelStatus::kUnknown;
++  const double angle = std::atan2(std::sin(to_yaw-from_yaw), std::cos(to_yaw-from_yaw));
++  const int count = std::max(1, static_cast<int>(std::ceil(std::abs(angle)/(2.*M_PI/180.))));
++  const double step = angle/count;
++  // This is a bound on actual corner motion within each 2-degree interval,
++  // not a safety clearance: every intermediate orientation is enclosed.
++  const double motion = std::hypot(size.x(), size.y()) * std::sin(std::abs(step)/4.);
++  const Eigen::Vector3d interval_size = size + Eigen::Vector3d(2.*motion, 2.*motion, 0.);
++  VoxelStatus result = VoxelStatus::kFree;
++  for (int i = 0; i < count; ++i) {
++    auto status = getSweptBoxStatus(center, center, interval_size,
++                                   from_yaw+(i+.5)*step, stop_at_unknown);
++    if (status == VoxelStatus::kOccupied || (stop_at_unknown && status == VoxelStatus::kUnknown)) return status;
++    if (status == VoxelStatus::kUnknown) result = status;
++  }
++  return result;
++}
+ 
+ template <typename SDFServerType, typename SDFVoxelType>
+ VoxelStatus MapManagerVoxblox<SDFServerType, SDFVoxelType>::getBoxStatus(
+     const Eigen::Vector3d& center, const Eigen::Vector3d& size,
+     bool stop_at_unknown_voxel) {
++  if (collision_geometry_fix_)
++    return getSweptBoxStatus(center, center, size, 0., stop_at_unknown_voxel);
+   //
+   if(box_status_method_ == 1) {    
+     float voxel_size = sdf_layer_->voxel_size();
+@@ -81,6 +176,8 @@
+ VoxelStatus MapManagerVoxblox<SDFServerType, SDFVoxelType>::getPathStatus(
+     const Eigen::Vector3d& start, const Eigen::Vector3d& end,
+     const Eigen::Vector3d& box_size, bool stop_at_unknown_voxel) {
++  if (collision_geometry_fix_)
++    return getPathStatusAtYaw(start, end, box_size, std::atan2(end.y()-start.y(), end.x()-start.x()), stop_at_unknown_voxel);
+   //
+   if(line_status_method_ == 1) {
+     float voxel_size = sdf_layer_->voxel_size();
+@@ -864,4 +961,4 @@
+   }
+   gain_log =
+       std::make_tuple(num_unknown_voxels, num_free_voxels, num_occupied_voxels);
+-}
+\ No newline at end of file
++}

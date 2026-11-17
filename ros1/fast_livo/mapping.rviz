@@ -1,0 +1,90 @@
+Panels:
+  - Class: rviz/Displays
+    Name: 显示
+Preferences:
+  PromptSaveOnExit: false
+Visualization Manager:
+  Class: ""
+  Enabled: true
+  Global Options:
+    Background Color: 30; 30; 35
+    Default Light: true
+    Fixed Frame: livo_map
+    Frame Rate: 20
+  Displays:
+    - Class: rviz/Grid
+      Name: 估计地图坐标
+      Enabled: true
+      Value: true
+      Alpha: 0.25
+      Cell Size: 2
+      Color: 110; 110; 120
+      Plane: XY
+      Plane Cell Count: 20
+      Reference Frame: <Fixed Frame>
+    - Class: rviz/RobotModel
+      Name: AlienGo（FAST-LIVO2估计位姿）
+      Enabled: true
+      Value: true
+      Alpha: 1
+      Collision Enabled: false
+      Visual Enabled: true
+      Robot Description: /robot_description
+      TF Prefix: ""
+    - Class: rviz/PointCloud2
+      Name: FAST-LIVO2彩色地图（30秒累积）
+      Enabled: true
+      Value: true
+      Topic: /fast_livo/cloud_world
+      Position Transformer: XYZ
+      Color Transformer: RGB8
+      Alpha: 1
+      Decay Time: 30
+      Queue Size: 2
+      Style: Points
+      Size (Pixels): 2
+      Use Fixed Frame: true
+    - Class: rviz/Image
+      Name: D435彩色图像
+      Enabled: true
+      Value: true
+      Image Topic: /camera/color/image_raw
+      Transport Hint: raw
+      Queue Size: 2
+      Normalize Range: false
+    - Class: rviz/Image
+      Name: FAST-LIVO2视觉跟踪
+      Enabled: true
+      Value: true
+      Image Topic: /fast_livo/tracked_image
+      Transport Hint: raw
+      Queue Size: 2
+      Normalize Range: false
+    - Class: rviz/Path
+      Name: FAST-LIVO2估计轨迹
+      Enabled: true
+      Value: true
+      Topic: /fast_livo/path
+      Alpha: 1
+      Color: 40; 240; 100
+      Line Style: Lines
+      Line Width: 0.03
+  Tools:
+    - Class: rviz/Interact
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Name: FAST-LIVO2地图视角
+      Target Frame: <Fixed Frame>
+      Distance: 20
+      Pitch: 0.6
+      Yaw: 0.8
+      Focal Point: {X: 0, Y: 0, Z: 0}
+Window Geometry:
+  Width: 1600
+  Height: 900
+  Hide Left Dock: false
+  Hide Right Dock: true

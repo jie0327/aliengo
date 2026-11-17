@@ -1,0 +1,16 @@
+<launch>
+  <arg name="serial" default=""/>
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <arg name="serial_no" value="$(arg serial)"/>
+    <arg name="camera" value="camera"/><arg name="tf_prefix" value="d435"/>
+    <!-- Transmit images; create XYZ on the laptop to avoid duplicate dense
+         pointcloud TCP streams over the robot's Ethernet connection. -->
+    <arg name="enable_pointcloud" value="false"/>
+    <arg name="enable_sync" value="true"/>
+    <arg name="depth_width" value="424"/><arg name="depth_height" value="240"/>
+    <arg name="depth_fps" value="6"/>
+    <arg name="color_width" value="424"/><arg name="color_height" value="240"/>
+    <arg name="color_fps" value="6"/>
+    <arg name="publish_tf" value="true"/>
+  </include>
+</launch>

@@ -1,0 +1,113 @@
+{
+  "sources": [
+    {
+      "name": "citysim",
+      "repository": "https://github.com/osrf/citysim.git",
+      "commit": "3928b08e2598f5ead2e9b24640fe1bde262a136d",
+      "path": "references/citysim",
+      "sparse_directories": [
+        "models/city_terrain",
+        "models/ocean",
+        "media",
+        "worlds"
+      ],
+      "license": {
+        "spdx": "Apache-2.0",
+        "path": "LICENSE",
+        "additional_notices": [
+          "models/ocean/materials/textures/License and source soil_sand_0045_01.txt"
+        ]
+      }
+    },
+    {
+      "name": "gazebo_city_models",
+      "repository": "https://github.com/osrf/gazebo_models.git",
+      "commit": "8163eb4b5e7e21985c6591d1c0bfb56468c0093f",
+      "path": "references/gazebo_city_models",
+      "sparse_directories": [
+        "ambulance",
+        "apartment",
+        "asphalt_plane",
+        "bus",
+        "cafe_table",
+        "cardboard_box",
+        "cinder_block",
+        "cinder_block_2",
+        "collapsed_industrial",
+        "construction_barrel",
+        "construction_cone",
+        "drc_practice_angled_barrier_45",
+        "drc_practice_blue_cylinder",
+        "drc_practice_orange_jersey_barrier",
+        "drc_practice_white_jersey_barrier",
+        "dumpster",
+        "fast_food",
+        "fire_hydrant",
+        "fire_station",
+        "fire_truck",
+        "fountain",
+        "gas_station",
+        "gazebo",
+        "grocery_store",
+        "hatchback",
+        "hatchback_blue",
+        "hatchback_red",
+        "house_1",
+        "house_2",
+        "house_3",
+        "lamp_post",
+        "law_office",
+        "oak_tree",
+        "osrf_first_office",
+        "parking_garage",
+        "pickup",
+        "pier",
+        "pine_tree",
+        "playground",
+        "police_station",
+        "post_office",
+        "postbox",
+        "powerplant",
+        "radio_tower",
+        "reactor",
+        "robocup_3Dsim_field",
+        "salon",
+        "school",
+        "stop_light",
+        "stop_light_post",
+        "stop_sign",
+        "suv",
+        "telephone_pole",
+        "thrift_shop",
+        "tower_crane",
+        "truss_bridge"
+      ],
+      "license": {
+        "spdx": "CC-BY-3.0",
+        "path": "LICENSE",
+        "attribution": "Retain each model.config with its original author information."
+      }
+    }
+  ],
+  "world": {
+    "source": "references/citysim/worlds/simple_city.world",
+    "generated": "ros1/worlds/city.world",
+    "generator": "scripts/prepare_city_world.py",
+    "model_paths": [
+      "references/citysim/models",
+      "references/gazebo_city_models"
+    ],
+    "resource_paths": [
+      "references/citysim"
+    ],
+    "ground_z": 5.01,
+    "spawn": {
+      "x": -45.0,
+      "y": -25.0,
+      "z": 5.61,
+      "roll": 0.0,
+      "pitch": 0.0,
+      "yaw": 1.5707963267948966
+    }
+  }
+}

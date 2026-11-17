@@ -1,0 +1,28 @@
+{
+    "C_Cpp.intelliSenseMemoryLimit": 512,
+    "C_Cpp.intelliSenseCacheSize": 256,
+    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.ros1/editor/ipch",
+    "C_Cpp.workspaceParsingPriority": "low",
+    "C_Cpp.files.exclude": {
+        "**/.vscode": true,
+        "**/.git": true,
+        ".ros1/build/**": true,
+        ".ros1/editor/**": true,
+        ".ros1_rl/**": true,
+        ".ppo-work/**": true,
+        "downloads/**": true,
+        "logs/**": true
+    },
+    "files.watcherExclude": {
+        "**/.ros1/build/**": true,
+        "**/.ros1/editor/**": true,
+        "**/.ros1_rl/**": true,
+        "**/.ppo-work/**": true
+    },
+    "search.exclude": {
+        "**/.ros1/build/**": true,
+        "**/.ros1/editor/**": true,
+        "**/.ros1_rl/**": true,
+        "**/.ppo-work/**": true
+    }
+}

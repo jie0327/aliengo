@@ -1,0 +1,36 @@
+--- unitree_guide/src/common/unitreeRobot.cpp
++++ unitree_guide/src/common/unitreeRobot.cpp
+@@ -137,14 +137,14 @@
+ }
+ 
+ Go1Robot::Go1Robot(){
+-    _Legs[0] = new Go1Leg(0, Vec3( 0.1881, -0.04675, 0));
+-    _Legs[1] = new Go1Leg(1, Vec3( 0.1881,  0.04675, 0));
+-    _Legs[2] = new Go1Leg(2, Vec3(-0.1881, -0.04675, 0));
+-    _Legs[3] = new Go1Leg(3, Vec3(-0.1881,  0.04675, 0));
++    _Legs[0] = new QuadrupedLeg(0, 0.0868, 0.25, 0.25, Vec3( 0.2407, -0.051, 0));
++    _Legs[1] = new QuadrupedLeg(1, 0.0868, 0.25, 0.25, Vec3( 0.2407,  0.051, 0));
++    _Legs[2] = new QuadrupedLeg(2, 0.0868, 0.25, 0.25, Vec3(-0.2407, -0.051, 0));
++    _Legs[3] = new QuadrupedLeg(3, 0.0868, 0.25, 0.25, Vec3(-0.2407,  0.051, 0));
+ 
+-    _feetPosNormalStand <<  0.1881,  0.1881, -0.1881, -0.1881,
+-                           -0.1300,  0.1300, -0.1300,  0.1300,
+-                           -0.3200, -0.3200, -0.3200, -0.3200;
++    _feetPosNormalStand <<  0.2407,  0.2407, -0.2407, -0.2407,
++                           -0.1378,  0.1378, -0.1378,  0.1378,
++                           -0.3980, -0.3980, -0.3980, -0.3980;
+ 
+     _robVelLimitX << -0.4, 0.4;
+     _robVelLimitY << -0.3, 0.3;
+@@ -158,8 +158,8 @@
+ #endif  // COMPILE_WITH_REAL_ROBOT
+ 
+ #ifdef COMPILE_WITH_SIMULATION
+-    _mass = 12.0;
++    _mass = 24.937;
+     _pcb << 0.0, 0.0, 0.0;
+-    _Ib = Vec3(0.0792, 0.2085, 0.2265).asDiagonal();
++    _Ib = Vec3(0.2984, 1.0771, 1.0820).asDiagonal();
+ #endif  // COMPILE_WITH_SIMULATION
+ }
+\ No newline at end of file

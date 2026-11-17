@@ -1,0 +1,10 @@
+# Dependency cache only. The runtime is the current project's ROS1/LIO stack.
+ARG GBP_DEPENDENCY_IMAGE=aliengo-exploration:simulation
+FROM ${GBP_DEPENDENCY_IMAGE}
+SHELL ["/bin/bash", "-c"]
+ENV ROS_HOME=/tmp/aliengo-ros ROS_LOG_DIR=/tmp/aliengo-ros/log
+LABEL org.aliengo.gbp.dependency-image-id="sha256:1874ecd35a34f6dd47d32becda8fb85b2c67f273a400413d95dfd297c8e1c5d8"
+# Override the old project's entrypoint and command; launchers explicitly source
+# current /work, /lio and /gbp overlays and start current project nodes.
+ENTRYPOINT ["/bin/bash"]
+CMD ["-l"]

@@ -1,0 +1,2144 @@
+{
+  "result": "PASS",
+  "seconds": 10.0,
+  "gui": false,
+  "rviz": true,
+  "record_bag": false,
+  "phases": {
+    "stand": {
+      "start_sim": 1.2708,
+      "end_sim": 9.2744,
+      "wall_seconds": 9.726256912999816,
+      "start_truth": {
+        "stamp": 1.2062,
+        "wall": 5.834274311000627,
+        "phase": "startup",
+        "position": [
+          -5.083894863766609,
+          0.010362455696159437,
+          0.2140394061018901
+        ],
+        "quaternion": [
+          -0.024359737629042044,
+          0.01483762141911449,
+          0.0029994048308772114,
+          0.9995886412639592
+        ],
+        "matrix": [
+          [
+            0.9995416971225671,
+            -0.006719223128611577,
+            0.02951690623839643,
+            -5.083894863766609
+          ],
+          [
+            0.005273460869376845,
+            0.9987952135066095,
+            0.04878844214304776,
+            0.010362455696159437
+          ],
+          [
+            -0.02980916509729023,
+            -0.048610426009594886,
+            0.9983728963465346,
+            0.2140394061018901
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.04865122786105057,
+        "pitch": 0.02981358153289604,
+        "yaw": 0.005275829869456726
+      },
+      "end_truth": {
+        "stamp": 9.2654,
+        "wall": 15.634687350000604,
+        "phase": "stand",
+        "position": [
+          -4.968576562506051,
+          -0.002223993180467034,
+          0.4204322647304647
+        ],
+        "quaternion": [
+          0.0036434015569313067,
+          -0.004074680174897178,
+          0.002566633810812666,
+          0.9999817673325093
+        ],
+        "matrix": [
+          [
+            0.999953618744707,
+            -0.00516286542065008,
+            -0.008130509209972058,
+            -4.968576562506051
+          ],
+          [
+            0.005103482636277209,
+            0.9999602760319523,
+            -0.007307586679814643,
+            -0.002223993180467034
+          ],
+          [
+            0.008167914320461607,
+            0.007265753832194086,
+            0.9999402452131345,
+            0.4204322647304647
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": 0.007266060146935654,
+        "pitch": -0.008168005143349815,
+        "yaw": 0.005103675040069085
+      }
+    },
+    "sensor_leadin": {
+      "start_sim": 9.2746,
+      "end_sim": 10.28,
+      "wall_seconds": 1.2291095670007053,
+      "start_truth": {
+        "stamp": 9.2654,
+        "wall": 15.634687350000604,
+        "phase": "stand",
+        "position": [
+          -4.968576562506051,
+          -0.002223993180467034,
+          0.4204322647304647
+        ],
+        "quaternion": [
+          0.0036434015569313067,
+          -0.004074680174897178,
+          0.002566633810812666,
+          0.9999817673325093
+        ],
+        "matrix": [
+          [
+            0.999953618744707,
+            -0.00516286542065008,
+            -0.008130509209972058,
+            -4.968576562506051
+          ],
+          [
+            0.005103482636277209,
+            0.9999602760319523,
+            -0.007307586679814643,
+            -0.002223993180467034
+          ],
+          [
+            0.008167914320461607,
+            0.007265753832194086,
+            0.9999402452131345,
+            0.4204322647304647
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": 0.007266060146935654,
+        "pitch": -0.008168005143349815,
+        "yaw": 0.005103675040069085
+      },
+      "end_truth": {
+        "stamp": 10.2432,
+        "wall": 16.83430356000099,
+        "phase": "sensor_leadin",
+        "position": [
+          -4.968577040826816,
+          -0.0022242559481997675,
+          0.4204309878499169
+        ],
+        "quaternion": [
+          0.003642254239877529,
+          -0.00407474038674671,
+          0.002569808755653473,
+          0.999981763112604
+        ],
+        "matrix": [
+          [
+            0.99995358514748,
+            -0.005169206261581191,
+            -0.00813061235865831,
+            -4.968577040826816
+          ],
+          [
+            0.005109841299781078,
+            0.999960260134023,
+            -0.007305318240039931,
+            -0.0022242559481997675
+          ],
+          [
+            0.008168051946002123,
+            0.0072634330259484245,
+            0.9999402609496654,
+            0.4204309878499169
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": 0.007263739210188017,
+        "pitch": -0.008168142773481471,
+        "yaw": 0.0051100340043574
+      }
+    },
+    "trot_zero": {
+      "start_sim": 11.8856,
+      "end_sim": 13.8898,
+      "wall_seconds": 2.431023445999017,
+      "start_truth": {
+        "stamp": 11.8494,
+        "wall": 18.833796155002346,
+        "phase": "sensor_leadin",
+        "position": [
+          -4.968577838062519,
+          -0.002224654636752061,
+          0.42042888800040407
+        ],
+        "quaternion": [
+          0.0036403831507748345,
+          -0.004074834450141107,
+          0.0025751510628482886,
+          0.999981755799436
+        ],
+        "matrix": [
+          [
+            0.9999535286424149,
+            -0.005179876079900614,
+            -0.008130771143008484,
+            -4.968577838062519
+          ],
+          [
+            0.005120540245202651,
+            0.9999602324150382,
+            -0.00730162009831943,
+            -0.002224654636752061
+          ],
+          [
+            0.008168269289168055,
+            0.007259646841258583,
+            0.999940286669439,
+            0.42042888800040407
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": 0.007259952812243282,
+        "pitch": -0.008168360123898207,
+        "yaw": 0.005120733455776191
+      },
+      "end_truth": {
+        "stamp": 13.8226,
+        "wall": 21.234069882000767,
+        "phase": "trot_zero",
+        "position": [
+          -4.969627371099272,
+          -0.0014803506908740546,
+          0.42896238770509804
+        ],
+        "quaternion": [
+          -0.000992498549374612,
+          0.0011186197356732245,
+          0.0025135555721485176,
+          0.999995722828304
+        ],
+        "matrix": [
+          [
+            0.9999848614565454,
+            -0.005029310099409452,
+            0.002232240501770846,
+            -4.969627371099272
+          ],
+          [
+            0.005024869185549623,
+            0.9999853939700304,
+            0.001990612034315251,
+            -0.0014803506908740546
+          ],
+          [
+            -0.0022422193028073653,
+            -0.001979365182836384,
+            0.9999955272730329,
+            0.42896238770509804
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.001979371451031343,
+        "pitch": 0.0022422211816222545,
+        "yaw": 0.005024902963127904
+      }
+    },
+    "walk": {
+      "start_sim": 13.9934,
+      "end_sim": 23.9976,
+      "wall_seconds": 12.167925719000777,
+      "start_truth": {
+        "stamp": 13.906,
+        "wall": 21.33421414899931,
+        "phase": "trot_zero",
+        "position": [
+          -4.9696003131657855,
+          -0.0014585310996484981,
+          0.4289613318248006
+        ],
+        "quaternion": [
+          -0.0009913201641075322,
+          0.0011152456344188822,
+          0.0025137779321025284,
+          0.9999957272068793
+        ],
+        "matrix": [
+          [
+            0.999984874295366,
+            -0.005029745513469612,
+            0.002225497820905652,
+            -4.9696003131657855
+          ],
+          [
+            0.005025323251528282,
+            0.9999853964096806,
+            0.001988238816532461,
+            -0.0014585310996484981
+          ],
+          [
+            -0.0022354656559143786,
+            -0.0019770248970737577,
+            0.9999955470230143,
+            0.4289613318248006
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.0019770311249130345,
+        "pitch": 0.002235467517803149,
+        "yaw": 0.005025356959994898
+      },
+      "end_truth": {
+        "stamp": 23.9408,
+        "wall": 33.53391268700216,
+        "phase": "walk",
+        "position": [
+          -4.490807312956995,
+          0.001197668732907472,
+          0.42928256338582005
+        ],
+        "quaternion": [
+          -0.0027150172923059634,
+          0.0009304086374952502,
+          0.0030872003554447552,
+          0.9999911160679555
+        ],
+        "matrix": [
+          [
+            0.9999792070674652,
+            -0.006179398009012601,
+            0.001844037138916591,
+            -4.490807312956995
+          ],
+          [
+            0.006169293706853759,
+            0.9999661957501357,
+            0.0054357310603064465,
+            0.001197668732907472
+          ],
+          [
+            -0.0018775643483159737,
+            -0.00542424162880091,
+            0.9999835260417395,
+            0.42928256338582005
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.005424277789249176,
+        "pitch": 0.0018775654514643476,
+        "yaw": 0.0061693437159809775
+      }
+    },
+    "stop": {
+      "start_sim": 23.9976,
+      "end_sim": 29.0044,
+      "wall_seconds": 7.2356966139996075,
+      "start_truth": {
+        "stamp": 23.9408,
+        "wall": 33.53391268700216,
+        "phase": "walk",
+        "position": [
+          -4.490807312956995,
+          0.001197668732907472,
+          0.42928256338582005
+        ],
+        "quaternion": [
+          -0.0027150172923059634,
+          0.0009304086374952502,
+          0.0030872003554447552,
+          0.9999911160679555
+        ],
+        "matrix": [
+          [
+            0.9999792070674652,
+            -0.006179398009012601,
+            0.001844037138916591,
+            -4.490807312956995
+          ],
+          [
+            0.006169293706853759,
+            0.9999661957501357,
+            0.0054357310603064465,
+            0.001197668732907472
+          ],
+          [
+            -0.0018775643483159737,
+            -0.00542424162880091,
+            0.9999835260417395,
+            0.42928256338582005
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.005424277789249176,
+        "pitch": 0.0018775654514643476,
+        "yaw": 0.0061693437159809775
+      },
+      "end_truth": {
+        "stamp": 28.9308,
+        "wall": 40.734967500000494,
+        "phase": "stop",
+        "position": [
+          -4.4878226894599855,
+          -0.001944741431460013,
+          0.42879594461787274
+        ],
+        "quaternion": [
+          -0.0010029281701976628,
+          0.0011223294467820866,
+          0.002516746342495086,
+          0.999995700240529
+        ],
+        "matrix": [
+          [
+            0.9999848127289208,
+            -0.005035722273819167,
+            0.002239601010462576,
+            -4.4878226894599855
+          ],
+          [
+            0.0050312198105454875,
+            0.999985320245866,
+            0.002011496952756055,
+            -0.001944741431460013
+          ],
+          [
+            -0.002249697473679097,
+            -0.0020001984786350018,
+            0.9999954690233966,
+            0.42879594461787274
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.0020002048740380587,
+        "pitch": 0.002249699371355252,
+        "yaw": 0.005031253768870181
+      }
+    },
+    "turn": {
+      "start_sim": 29.1052,
+      "end_sim": 37.1074,
+      "wall_seconds": 11.16216853199876,
+      "start_truth": {
+        "stamp": 29.078,
+        "wall": 40.935112896000646,
+        "phase": "stop",
+        "position": [
+          -4.48780461768609,
+          -0.0019151396233633318,
+          0.42879614970892554
+        ],
+        "quaternion": [
+          -0.000999843881590323,
+          0.0011214589663637183,
+          0.0031017659360698937,
+          0.9999940608274016
+        ],
+        "matrix": [
+          [
+            0.9999782427557292,
+            -0.006205737596065226,
+            0.0022367020482641007,
+            -4.48780461768609
+          ],
+          [
+            0.006201252460521332,
+            0.9999787587205806,
+            0.002006632893131012,
+            -0.0019151396233633318
+          ],
+          [
+            -0.0022491071750373195,
+            -0.0019927188802487433,
+            0.9999954852839984,
+            0.42879614970892554
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.0019927252391716468,
+        "pitch": 0.0022491090712200693,
+        "yaw": 0.00620130789144606
+      },
+      "end_truth": {
+        "stamp": 37.1074,
+        "wall": 52.13494659299977,
+        "phase": "turn",
+        "position": [
+          -4.484526034537815,
+          -0.0023883862619007755,
+          0.42863426333042143
+        ],
+        "quaternion": [
+          -0.0012253079563963435,
+          0.0008329941555349042,
+          0.20008275272863799,
+          0.9797778813596884
+        ],
+        "matrix": [
+          [
+            0.9199323963625351,
+            -0.39207535247889147,
+            0.0011419725200778176,
+            -4.484526034537815
+          ],
+          [
+            0.3920712697814258,
+            0.9199307813618854,
+            0.0027343947943549393,
+            -0.0023883862619007755
+          ],
+          [
+            -0.0021226244755021472,
+            -0.002067723739769776,
+            0.9999956094822977,
+            0.42863426333042143
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.0020677298713178884,
+        "pitch": 0.0021226260694317376,
+        "yaw": 0.4028830151259189
+      }
+    },
+    "turn_stop": {
+      "start_sim": 37.1074,
+      "end_sim": 40.1076,
+      "wall_seconds": 4.289745096000843,
+      "start_truth": {
+        "stamp": 37.1074,
+        "wall": 52.13494659299977,
+        "phase": "turn",
+        "position": [
+          -4.484526034537815,
+          -0.0023883862619007755,
+          0.42863426333042143
+        ],
+        "quaternion": [
+          -0.0012253079563963435,
+          0.0008329941555349042,
+          0.20008275272863799,
+          0.9797778813596884
+        ],
+        "matrix": [
+          [
+            0.9199323963625351,
+            -0.39207535247889147,
+            0.0011419725200778176,
+            -4.484526034537815
+          ],
+          [
+            0.3920712697814258,
+            0.9199307813618854,
+            0.0027343947943549393,
+            -0.0023883862619007755
+          ],
+          [
+            -0.0021226244755021472,
+            -0.002067723739769776,
+            0.9999956094822977,
+            0.42863426333042143
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.0020677298713178884,
+        "pitch": 0.0021226260694317376,
+        "yaw": 0.4028830151259189
+      },
+      "end_truth": {
+        "stamp": 40.0324,
+        "wall": 56.33480334599881,
+        "phase": "turn_stop",
+        "position": [
+          -4.482723190634476,
+          -0.0022295832718516595,
+          0.4289703216001033
+        ],
+        "quaternion": [
+          -0.0012039516495336413,
+          0.0008779230140644678,
+          0.2005568315589651,
+          0.979680936359709
+        ],
+        "matrix": [
+          [
+            0.9195523731324206,
+            -0.3929655230237686,
+            0.0012372474245795182,
+            -4.482723190634476
+          ],
+          [
+            0.39296129511632477,
+            0.919551015630909,
+            0.0027111238748008006,
+            -0.0022295832718516595
+          ],
+          [
+            -0.002203090337302145,
+            -0.002006830042586935,
+            0.999995559503214,
+            0.4289703216001033
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "roll": -0.002006836259839239,
+        "pitch": 0.0022030921194618304,
+        "yaw": 0.40385077913523554
+      }
+    }
+  },
+  "checks": {
+    "forward_motion": true,
+    "forward_error": true,
+    "trajectory_rmse": true,
+    "truth_match_coverage": true,
+    "turn_motion": true,
+    "turn_error": true,
+    "tf_at_estimated_stamp": true,
+    "stop_truth_drift": true,
+    "stop_estimate_drift": true,
+    "turn_stop_truth_drift": true,
+    "turn_stop_estimate_drift": true,
+    "cloud_nonempty": true,
+    "path_received": true,
+    "map_pcd_nonempty": true
+  },
+  "failures": [],
+  "posture_limits": {
+    "min_z_m": 0.18,
+    "max_abs_roll_rad": 0.8,
+    "max_abs_pitch_rad": 0.8
+  },
+  "accuracy_limits": {
+    "forward_error_m": 0.2,
+    "position_rmse_m": 0.15,
+    "yaw_change_error_rad": 0.2,
+    "estimated_stop_drift_m": 0.1,
+    "truth_stop_drift_m": 0.05
+  },
+  "graphics": {
+    "vendor": "NVIDIA Corporation",
+    "renderer": "NVIDIA GeForce RTX 5060 Laptop GPU/PCIe/SSE2",
+    "version": "4.6.0 NVIDIA 595.99.02"
+  },
+  "launch_command": [
+    "roslaunch",
+    "--sigint-timeout=5",
+    "--sigterm-timeout=2",
+    "/course/ros1/mid360/gazebo.launch",
+    "rname:=aliengo",
+    "world_file:=/course/ros1/worlds/depot.world",
+    "spawn_x:=-5",
+    "spawn_y:=0",
+    "spawn_z:=0.6",
+    "spawn_yaw:=0",
+    "paused:=false",
+    "sim_ground_truth_tf:=false",
+    "rviz:=false",
+    "gui:=false"
+  ],
+  "base_to_imu": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.261
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.02329
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.10088
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "controller_command": [
+    "/work/devel/lib/unitree_guide/junior_ctrl"
+  ],
+  "lio_command": [
+    "roslaunch",
+    "/course/ros1/super_lio/mapping.launch",
+    "rviz:=true",
+    "map_dir:=../../../result/maps"
+  ],
+  "map_name": "depot.pcd",
+  "input_graph_last": {
+    "lio_nodes": [
+      "/super_lio_node"
+    ],
+    "lio_subscriptions": {
+      "/super_lio_node": [
+        "/clock",
+        "/livox/imu",
+        "/livox/lidar"
+      ]
+    },
+    "forbidden_subscriptions": {
+      "/super_lio_node": []
+    },
+    "all_subscriptions": [
+      [
+        "/tf",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/tf_static",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/clock",
+        [
+          "/super_lio_trial",
+          "/rosout",
+          "/robot_state_publisher",
+          "/aliengo_gazebo/controller_spawner",
+          "/mid360_cloud_converter",
+          "/mid360_imu_converter",
+          "/gazebo",
+          "/unitree_gazebo_servo",
+          "/super_lio_node",
+          "/super_lio_rviz",
+          "/lio_base_tf"
+        ]
+      ],
+      [
+        "/livox/lidar",
+        [
+          "/super_lio_trial",
+          "/super_lio_node"
+        ]
+      ],
+      [
+        "/livox/imu",
+        [
+          "/super_lio_trial",
+          "/super_lio_node"
+        ]
+      ],
+      [
+        "/lio/odom",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf"
+        ]
+      ],
+      [
+        "/lio/cloud_world",
+        [
+          "/super_lio_trial",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/lio/path",
+        [
+          "/super_lio_trial",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/rosout",
+        [
+          "/rosout"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/joint_states",
+        [
+          "/robot_state_publisher"
+        ]
+      ],
+      [
+        "/mid360_sim/points_raw",
+        [
+          "/mid360_cloud_converter"
+        ]
+      ],
+      [
+        "/mid360_sim/imu_raw",
+        [
+          "/mid360_imu_converter"
+        ]
+      ],
+      [
+        "/gazebo/set_link_state",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/gazebo/set_model_state",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/apply_force/trunk",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/trunk_imu",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ]
+    ],
+    "model_states_subscribers": []
+  },
+  "input_graph_start": {
+    "lio_nodes": [
+      "/super_lio_node"
+    ],
+    "lio_subscriptions": {
+      "/super_lio_node": [
+        "/clock",
+        "/livox/imu",
+        "/livox/lidar"
+      ]
+    },
+    "forbidden_subscriptions": {
+      "/super_lio_node": []
+    },
+    "all_subscriptions": [
+      [
+        "/tf",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/tf_static",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/clock",
+        [
+          "/super_lio_trial",
+          "/rosout",
+          "/robot_state_publisher",
+          "/aliengo_gazebo/controller_spawner",
+          "/mid360_cloud_converter",
+          "/mid360_imu_converter",
+          "/gazebo",
+          "/unitree_gazebo_servo",
+          "/super_lio_node",
+          "/super_lio_rviz",
+          "/lio_base_tf"
+        ]
+      ],
+      [
+        "/livox/lidar",
+        [
+          "/super_lio_trial",
+          "/super_lio_node"
+        ]
+      ],
+      [
+        "/livox/imu",
+        [
+          "/super_lio_trial",
+          "/super_lio_node"
+        ]
+      ],
+      [
+        "/lio/odom",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf"
+        ]
+      ],
+      [
+        "/lio/cloud_world",
+        [
+          "/super_lio_trial",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/lio/path",
+        [
+          "/super_lio_trial",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/rosout",
+        [
+          "/rosout"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/joint_states",
+        [
+          "/robot_state_publisher"
+        ]
+      ],
+      [
+        "/mid360_sim/points_raw",
+        [
+          "/mid360_cloud_converter"
+        ]
+      ],
+      [
+        "/mid360_sim/imu_raw",
+        [
+          "/mid360_imu_converter"
+        ]
+      ],
+      [
+        "/gazebo/set_link_state",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/gazebo/set_model_state",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/apply_force/trunk",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/trunk_imu",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ]
+    ],
+    "model_states_subscribers": []
+  },
+  "rviz_runtime": {
+    "fixed_frame": "lio_map",
+    "registered_cloud_subscribed": true,
+    "config_file": "rviz-runtime.rviz"
+  },
+  "initial_alignment": {
+    "stamp": 11.8058,
+    "matrix": [
+      [
+        0.9999875994196497,
+        -0.004979944081122023,
+        -3.411561403496473e-05,
+        -4.7108985629932505
+      ],
+      [
+        0.004979944110867725,
+        0.9999876000011366,
+        7.870167782978582e-07,
+        0.021927069635196174
+      ],
+      [
+        3.411127170184318e-05,
+        -9.56900870032959e-07,
+        0.9999999994177525,
+        0.5274022310953628
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "evaluation_only": true,
+    "updates": 1
+  },
+  "trajectory": {
+    "paired_samples": 283,
+    "eligible_samples": 283,
+    "matched_fraction": 1.0,
+    "position_rmse_m": 0.004640584561800023,
+    "max_position_error_m": 0.007662131283024499,
+    "walk": {
+      "samples": 100,
+      "truth_forward_m": 0.4765579390229248,
+      "estimate_forward_m": 0.4768114560747701,
+      "forward_error_m": 0.00025351705184524287,
+      "truth_displacement_xy_m": 0.4765580545754854,
+      "estimate_displacement_xy_m": 0.4768117071359074,
+      "truth_yaw_change_rad": 0.0009552570530490601,
+      "estimate_yaw_change_rad": 0.0006992785141733265,
+      "yaw_change_error_rad": 0.00025597853887573355
+    },
+    "stop": {
+      "samples": 50,
+      "truth_forward_m": -0.00029105881439675047,
+      "estimate_forward_m": 0.0010392121163710728,
+      "forward_error_m": 0.0013302709307678234,
+      "truth_displacement_xy_m": 0.002850200947772834,
+      "estimate_displacement_xy_m": 0.0031893972090741942,
+      "truth_yaw_change_rad": -0.0001226817410215379,
+      "estimate_yaw_change_rad": -9.502495195568613e-05,
+      "yaw_change_error_rad": 2.7656789065851756e-05
+    },
+    "turn": {
+      "samples": 80,
+      "truth_forward_m": 0.0032539624238212272,
+      "estimate_forward_m": 0.003342243937523677,
+      "forward_error_m": 8.828151370244972e-05,
+      "truth_displacement_xy_m": 0.0032961525291755334,
+      "estimate_displacement_xy_m": 0.00335238197752033,
+      "truth_yaw_change_rad": 0.3913479931260365,
+      "estimate_yaw_change_rad": 0.3913893349205953,
+      "yaw_change_error_rad": 4.1341794558780176e-05
+    },
+    "turn_stop": {
+      "samples": 29,
+      "truth_forward_m": 0.0016372158233304455,
+      "estimate_forward_m": 0.0016176787190844448,
+      "forward_error_m": 1.9537104246000693e-05,
+      "truth_displacement_xy_m": 0.0017225761226691639,
+      "estimate_displacement_xy_m": 0.002238884438405724,
+      "truth_yaw_change_rad": -0.00027856475209098175,
+      "estimate_yaw_change_rad": -0.00013612473692120597,
+      "yaw_change_error_rad": 0.00014244001516977578
+    }
+  },
+  "input_graph_end": {
+    "lio_nodes": [
+      "/super_lio_node"
+    ],
+    "lio_subscriptions": {
+      "/super_lio_node": [
+        "/clock",
+        "/livox/imu",
+        "/livox/lidar"
+      ]
+    },
+    "forbidden_subscriptions": {
+      "/super_lio_node": []
+    },
+    "all_subscriptions": [
+      [
+        "/tf",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/tf_static",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/clock",
+        [
+          "/super_lio_trial",
+          "/rosout",
+          "/robot_state_publisher",
+          "/aliengo_gazebo/controller_spawner",
+          "/mid360_cloud_converter",
+          "/mid360_imu_converter",
+          "/gazebo",
+          "/unitree_gazebo_servo",
+          "/super_lio_node",
+          "/super_lio_rviz",
+          "/lio_base_tf"
+        ]
+      ],
+      [
+        "/livox/lidar",
+        [
+          "/super_lio_trial",
+          "/super_lio_node"
+        ]
+      ],
+      [
+        "/livox/imu",
+        [
+          "/super_lio_trial",
+          "/super_lio_node"
+        ]
+      ],
+      [
+        "/lio/odom",
+        [
+          "/super_lio_trial",
+          "/lio_base_tf"
+        ]
+      ],
+      [
+        "/lio/cloud_world",
+        [
+          "/super_lio_trial",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/lio/path",
+        [
+          "/super_lio_trial",
+          "/super_lio_rviz"
+        ]
+      ],
+      [
+        "/rosout",
+        [
+          "/rosout"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/joint_states",
+        [
+          "/robot_state_publisher"
+        ]
+      ],
+      [
+        "/mid360_sim/points_raw",
+        [
+          "/mid360_cloud_converter"
+        ]
+      ],
+      [
+        "/mid360_sim/imu_raw",
+        [
+          "/mid360_imu_converter"
+        ]
+      ],
+      [
+        "/gazebo/set_link_state",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/gazebo/set_model_state",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/apply_force/trunk",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/joint_wrench",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/command",
+        [
+          "/gazebo"
+        ]
+      ],
+      [
+        "/trunk_imu",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FR_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/FL_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RR_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_hip_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_thigh_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ],
+      [
+        "/aliengo_gazebo/RL_calf_controller/state",
+        [
+          "/unitree_gazebo_servo"
+        ]
+      ]
+    ],
+    "model_states_subscribers": []
+  },
+  "phase_at_stop": "turn_stop",
+  "shutdown": {
+    "lio": {
+      "graceful": true,
+      "exited_before_signal": false,
+      "returncode": 0,
+      "wall_seconds": 0.8649370249986532
+    },
+    "controller": {
+      "graceful": true,
+      "exited_before_signal": false,
+      "returncode": 0,
+      "wall_seconds": 0.31404138799916836
+    },
+    "launch": {
+      "graceful": true,
+      "exited_before_signal": false,
+      "returncode": 0,
+      "wall_seconds": 6.533393451998563
+    }
+  },
+  "pcd_files": [
+    {
+      "path": "/result/maps/PCD/scans_0.pcd",
+      "bytes": 726924,
+      "points": 45421,
+      "payload_bytes": 726736,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_1.pcd",
+      "bytes": 730524,
+      "points": 45646,
+      "payload_bytes": 730336,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_10.pcd",
+      "bytes": 717676,
+      "points": 44843,
+      "payload_bytes": 717488,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_11.pcd",
+      "bytes": 723788,
+      "points": 45225,
+      "payload_bytes": 723600,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_12.pcd",
+      "bytes": 725676,
+      "points": 45343,
+      "payload_bytes": 725488,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_13.pcd",
+      "bytes": 721532,
+      "points": 45084,
+      "payload_bytes": 721344,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_14.pcd",
+      "bytes": 724124,
+      "points": 45246,
+      "payload_bytes": 723936,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_15.pcd",
+      "bytes": 727324,
+      "points": 45446,
+      "payload_bytes": 727136,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_16.pcd",
+      "bytes": 722508,
+      "points": 45145,
+      "payload_bytes": 722320,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_17.pcd",
+      "bytes": 722604,
+      "points": 45151,
+      "payload_bytes": 722416,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_18.pcd",
+      "bytes": 721884,
+      "points": 45106,
+      "payload_bytes": 721696,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_19.pcd",
+      "bytes": 730284,
+      "points": 45631,
+      "payload_bytes": 730096,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_2.pcd",
+      "bytes": 729884,
+      "points": 45606,
+      "payload_bytes": 729696,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_20.pcd",
+      "bytes": 724748,
+      "points": 45285,
+      "payload_bytes": 724560,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_21.pcd",
+      "bytes": 732044,
+      "points": 45741,
+      "payload_bytes": 731856,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_22.pcd",
+      "bytes": 730076,
+      "points": 45618,
+      "payload_bytes": 729888,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_23.pcd",
+      "bytes": 727372,
+      "points": 45449,
+      "payload_bytes": 727184,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_24.pcd",
+      "bytes": 726428,
+      "points": 45390,
+      "payload_bytes": 726240,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_25.pcd",
+      "bytes": 735052,
+      "points": 45929,
+      "payload_bytes": 734864,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_26.pcd",
+      "bytes": 728924,
+      "points": 45546,
+      "payload_bytes": 728736,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_27.pcd",
+      "bytes": 727452,
+      "points": 45454,
+      "payload_bytes": 727264,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_28.pcd",
+      "bytes": 441228,
+      "points": 27565,
+      "payload_bytes": 441040,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_3.pcd",
+      "bytes": 720204,
+      "points": 45001,
+      "payload_bytes": 720016,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_4.pcd",
+      "bytes": 723740,
+      "points": 45222,
+      "payload_bytes": 723552,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_5.pcd",
+      "bytes": 728300,
+      "points": 45507,
+      "payload_bytes": 728112,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_6.pcd",
+      "bytes": 722236,
+      "points": 45128,
+      "payload_bytes": 722048,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_7.pcd",
+      "bytes": 723404,
+      "points": 45201,
+      "payload_bytes": 723216,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_8.pcd",
+      "bytes": 726444,
+      "points": 45391,
+      "payload_bytes": 726256,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_9.pcd",
+      "bytes": 724732,
+      "points": 45284,
+      "payload_bytes": 724544,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/depot.pcd",
+      "bytes": 928476,
+      "points": 58018,
+      "payload_bytes": 928288,
+      "valid": true
+    }
+  ],
+  "lidar_count": 409,
+  "imu_count": 8167,
+  "odom_count": 286,
+  "cloud_count": 285,
+  "path_count": 6,
+  "truth_count": 535,
+  "tf": {
+    "attempts": 746,
+    "successful_stamps": 285,
+    "last_error": null,
+    "odom_stamp_ns": 40005600000,
+    "transform_stamp_ns": 40005600000,
+    "base_position_error_m": 3.925231146709438e-17,
+    "base_angle_error_rad": 0.0
+  },
+  "final_phase": "shutdown",
+  "wall_seconds": 64.77155818000028
+}

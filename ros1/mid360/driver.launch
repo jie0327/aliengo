@@ -1,0 +1,27 @@
+<launch>
+  <arg name="config"/>
+  <arg name="xfer_format" default="0"/>
+  <arg name="lidar_topic" default="/livox/lidar"/>
+  <arg name="imu_topic" default="/livox/imu"/>
+  <arg name="publish_freq" default="10.0"/>
+  <arg name="publish_static_tf" default="false"/>
+  <arg name="parent_frame" default="trunk"/>
+  <arg name="x" default="0"/><arg name="y" default="0"/><arg name="z" default="0"/>
+  <arg name="yaw" default="0"/><arg name="pitch" default="0"/><arg name="roll" default="0"/>
+  <param name="xfer_format" value="$(arg xfer_format)"/>
+  <param name="multi_topic" value="0"/>
+  <param name="data_src" value="0"/>
+  <param name="publish_freq" type="double" value="$(arg publish_freq)"/>
+  <param name="output_data_type" value="0"/>
+  <param name="cmdline_str" type="string" value="100000000000000"/>
+  <param name="cmdline_file_path" type="string" value="livox_test.lvx"/>
+  <param name="user_config_path" type="string" value="$(arg config)"/>
+  <param name="frame_id" type="string" value="mid360_link"/>
+  <param name="enable_lidar_bag" type="bool" value="false"/>
+  <param name="enable_imu_bag" type="bool" value="false"/>
+  <node name="livox_lidar_publisher2" pkg="livox_ros_driver2" type="livox_ros_driver2_node" output="screen" required="true" args="100000000000000">
+    <remap from="/livox/lidar" to="$(arg lidar_topic)"/>
+    <remap from="/livox/imu" to="$(arg imu_topic)"/>
+  </node>
+  <node if="$(arg publish_static_tf)" pkg="tf" type="static_transform_publisher" name="mid360_static_tf" args="$(arg x) $(arg y) $(arg z) $(arg yaw) $(arg pitch) $(arg roll) $(arg parent_frame) mid360_link 100"/>
+</launch>

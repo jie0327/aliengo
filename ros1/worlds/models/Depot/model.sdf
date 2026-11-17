@@ -1,0 +1,594 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.6">
+  <model name="Depot">
+    <static>true</static>
+    <link name="main">
+      <visual name="ROOF_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>ROOF</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="WALLS_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>WALLS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="PILLERS_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>PILLERS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="FANS_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FANS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="WINDOW_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>WINDOW</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="INTERCOM_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>INTERCOM</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="FireAlarm_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FireAlarm</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="FireAlarmPole_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FireAlarmPole</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="Pipes_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>Pipes</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="STAIRS_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>STAIRS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="BOXSET_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>BOXSET</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="FLOOR_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FLOOR</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="FanBack_visual">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FanBack</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name="crates">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Crates.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="ROOF_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>ROOF</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="WALLS_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>WALLS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="PILLERS_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>PILLERS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="FANS_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FANS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="WINDOW_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>WINDOW</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="INTERCOM_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>INTERCOM</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="FireAlarm_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FireAlarm</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="FireAlarmPole_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FireAlarmPole</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="Pipes_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>Pipes</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="STAIRS_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>STAIRS</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="BOXSET_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>BOXSET</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="FLOOR_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FLOOR</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="FanBack_visual_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FanBack</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name="crates_collision">
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Crates.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <link name="Fan1">
+      <pose>-5.0154 -0.2952 6.12 0 0 0</pose>
+      <visual name="visual">
+        <pose>5.0154 0.2952 -6.12 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FAN1</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <light type="point" name="fan_light">
+        <diffuse>1 1 1 1</diffuse>
+        <specular>0.3 0.3 0.3 1</specular>
+        <attenuation>
+          <range>50</range>
+          <linear>0.01</linear>
+          <constant>0.5</constant>
+          <quadratic>0.002</quadratic>
+        </attenuation>
+        <cast_shadows>false</cast_shadows>
+        <intensity>1.0</intensity>
+      </light>
+      <collision name="visual_collision">
+        <pose>5.0154 0.2952 -6.12 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FAN1</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <link name="Fan2">
+      <pose>5.0154 -0.2952 6.12 0 0 0</pose>
+      <visual name="visual">
+        <pose>5.0154 0.2952 -6.12 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FAN1</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+      </visual>
+      <light type="point" name="fan_light">
+        <diffuse>1 1 1 1</diffuse>
+        <specular>0.3 0.3 0.3 1</specular>
+        <attenuation>
+          <range>50</range>
+          <linear>0.01</linear>
+          <constant>0.5</constant>
+          <quadratic>0.002</quadratic>
+        </attenuation>
+        <cast_shadows>false</cast_shadows>
+        <intensity>1.0</intensity>
+      </light>
+      <collision name="visual_collision">
+        <pose>5.0154 0.2952 -6.12 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.6 0.6 0.6</scale>
+            <uri>model://Depot/meshes/Depot.dae</uri>
+            <submesh>
+              <name>FAN1</name>
+              <center>false</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0xffff</collide_bitmask>
+          </contact>
+          <friction>
+            <ode>
+              <mu>100</mu>
+              <mu2>50</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+  </model>
+</sdf>

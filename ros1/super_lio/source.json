@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/Liansheng-Wang/Super-LIO.git",
+  "branch": "ros1",
+  "commit": "60b57aaac8dc397f80c56364e7ccb008c300cc29",
+  "reference_path": "references/Super-LIO",
+  "workspace": ".super_lio",
+  "license": "GPL-3.0",
+  "patch": "ros1/patches/super_lio_snapshot.patch",
+  "additional_patches": ["ros1/patches/super_lio_cancel_empty_map.patch"],
+  "image": "aliengo-learning:noetic-lio"
+}

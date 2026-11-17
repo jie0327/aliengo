@@ -1,0 +1,131 @@
+Panels:
+- Class: rviz/Displays
+  Name: 显示
+Preferences:
+  PromptSaveOnExit: false
+Visualization Manager:
+  Class: ''
+  Enabled: true
+  Global Options:
+    Background Color: 30; 30; 35
+    Default Light: true
+    Fixed Frame: lio_map
+    Frame Rate: 30
+  Displays:
+  - Class: rviz/Grid
+    Name: 估计坐标参考网格
+    Enabled: true
+    Value: true
+    Alpha: 0.25
+    Cell Size: 2
+    Color: 110; 110; 120
+    Plane: XY
+    Plane Cell Count: 20
+    Reference Frame: <Fixed Frame>
+    Offset:
+      X: 0
+      Y: 0
+      Z: -0.53
+  - Class: rviz/RobotModel
+    Name: AlienGo（Super-LIO估计位姿）
+    Enabled: true
+    Value: true
+    Alpha: 1
+    Collision Enabled: false
+    Visual Enabled: true
+    Robot Description: /robot_description
+    TF Prefix: ''
+  - Class: rviz/PointCloud2
+    Name: Super-LIO配准点云（30秒累积）
+    Enabled: true
+    Value: true
+    Topic: /lio/cloud_world
+    Position Transformer: XYZ
+    Color Transformer: AxisColor
+    Axis: Z
+    Autocompute Value Bounds:
+      Value: true
+    Alpha: 1
+    Decay Time: 30
+    Queue Size: 2
+    Style: Points
+    Size (Pixels): 2
+    Use Fixed Frame: true
+    Use rainbow: true
+  - Class: rviz/Image
+    Name: D435 彩色图像
+    Enabled: true
+    Value: true
+    Image Topic: /camera/color/image_raw
+    Transport Hint: raw
+    Queue Size: 2
+    Normalize Range: false
+  - Class: rviz/PointCloud2
+    Name: D435 彩色点云
+    Enabled: true
+    Value: true
+    Topic: /camera/depth/color/points
+    Position Transformer: XYZ
+    Color Transformer: RGB8
+    Alpha: 1
+    Decay Time: 0
+    Queue Size: 10
+    Style: Points
+    Size (Pixels): 2
+    Size (m): 0.01
+    Selectable: true
+    Use Fixed Frame: true
+  - Class: rviz/Path
+    Name: Super-LIO估计轨迹
+    Enabled: true
+    Value: true
+    Topic: /lio/path
+    Alpha: 1
+    Color: 40; 240; 100
+    Line Style: Lines
+    Line Width: 0.03
+  - Class: rviz/PointCloud2
+    Name: 已观测地面
+    Enabled: true
+    Value: true
+    Topic: /exploration/terrain_points
+    Position Transformer: XYZ
+    Color Transformer: AxisColor
+    Axis: Z
+    Alpha: 0.7
+    Queue Size: 2
+    Style: Points
+    Size (Pixels): 3
+    Decay Time: 0
+    Use Fixed Frame: true
+  - Class: rviz/Path
+    Name: GBPlanner 当前执行路径
+    Enabled: true
+    Value: true
+    Topic: /exploration/path
+    Color: 255; 150; 30
+    Alpha: 1
+    Line Style: Lines
+    Line Width: 0.04
+  Tools:
+  - Class: rviz/Interact
+  - Class: rviz/MoveCamera
+  - Class: rviz/Select
+  - Class: rviz/FocusCamera
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Name: GBPlanner 探索视角
+      Target Frame: <Fixed Frame>
+      Distance: 20
+      Pitch: 0.6
+      Yaw: 0.8
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+Window Geometry:
+  Width: 1920
+  Height: 1080
+  Hide Left Dock: false
+  Hide Right Dock: true

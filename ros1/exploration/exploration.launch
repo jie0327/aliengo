@@ -1,0 +1,18 @@
+<launch>
+  <arg name="rviz" default="true"/>
+  <arg name="map_dir" default="../../maps/exploration"/>
+  <arg name="max_completed_paths" default="0"/>
+  <include file="$(find aliengo_super_lio)/mapping.launch">
+    <arg name="rviz" value="false"/>
+    <arg name="map_dir" value="$(arg map_dir)"/>
+  </include>
+  <node pkg="aliengo_exploration" type="mapping_node.py" name="exploration_mapping" output="screen"/>
+  <include file="$(find aliengo_exploration)/planner.launch"/>
+  <node pkg="aliengo_exploration" type="coordinator.py" name="exploration_coordinator" output="screen">
+    <param name="max_completed_paths" value="$(arg max_completed_paths)"/>
+  </node>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="exploration_rviz"
+        args="-d $(find aliengo_exploration)/exploration.rviz" output="screen">
+    <env name="DISABLE_ROS1_EOL_WARNINGS" value="1"/>
+  </node>
+</launch>

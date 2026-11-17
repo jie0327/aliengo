@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<robot name="aliengo" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Approximate mount; measure these six values on the actual robot. The
+       frame origin is the nominal scan origin, not the bottom of the housing. -->
+  <xacro:arg name="mid360_x" default="0.25"/>
+  <xacro:arg name="mid360_y" default="0"/>
+  <!-- Housing bottom rests on trunk top: 0.056 + 0.047 = 0.103 m. -->
+  <xacro:arg name="mid360_z" default="0.103"/>
+  <xacro:arg name="mid360_roll" default="0"/>
+  <xacro:arg name="mid360_pitch" default="0"/>
+  <xacro:arg name="mid360_yaw" default="0"/>
+  <xacro:arg name="mid360_downsample" default="4"/>
+  <!-- The lower-row camera's nominal depth origin; adjust to measured TF. -->
+  <xacro:arg name="d435_enabled" default="true"/>
+  <xacro:arg name="d435_x" default="0.32"/>
+  <xacro:arg name="d435_y" default="0"/>
+  <xacro:arg name="d435_z" default="-0.03"/>
+  <xacro:arg name="d435_roll" default="0"/>
+  <xacro:arg name="d435_pitch" default="0"/>
+  <xacro:arg name="d435_yaw" default="0"/>
+  <xacro:arg name="d435_depth_width" default="848"/>
+  <xacro:arg name="d435_depth_height" default="480"/>
+  <xacro:arg name="d435_color_width" default="1280"/>
+  <xacro:arg name="d435_color_height" default="720"/>
+  <xacro:arg name="d435_rate" default="30"/>
+  <xacro:arg name="d435_depth_hfov" default="1.518436449"/>
+  <xacro:arg name="d435_color_hfov" default="1.204277184"/>
+  <xacro:arg name="d435_min_depth" default="0.2"/>
+  <xacro:arg name="d435_max_depth" default="10"/>
+  <xacro:arg name="d435_color_offset_y" default="0.015"/>
+  <xacro:arg name="d435_stereo_baseline" default="0.05"/>
+  <xacro:include filename="$(find aliengo_description)/xacro/robot.xacro"/>
+  <xacro:include filename="/course/ros1/mid360/imu.xacro"/>
+  <xacro:include filename="/course/ros1/mid360/mount.xacro"/>
+  <xacro:include filename="/course/ros1/mid360/d435.xacro"/>
+
+  <xacro:if value="$(arg d435_enabled)">
+    <xacro:d435_camera x="$(arg d435_x)" y="$(arg d435_y)" z="$(arg d435_z)"
+      roll="$(arg d435_roll)" pitch="$(arg d435_pitch)" yaw="$(arg d435_yaw)"
+      depth_width="$(arg d435_depth_width)" depth_height="$(arg d435_depth_height)"
+      color_width="$(arg d435_color_width)" color_height="$(arg d435_color_height)"
+      rate="$(arg d435_rate)" depth_hfov="$(arg d435_depth_hfov)" color_hfov="$(arg d435_color_hfov)"
+      min_depth="$(arg d435_min_depth)" max_depth="$(arg d435_max_depth)"
+      color_offset_y="$(arg d435_color_offset_y)" stereo_baseline="$(arg d435_stereo_baseline)"/>
+  </xacro:if>
+
+  <xacro:mid360_mount x="$(arg mid360_x)" y="$(arg mid360_y)" sensor_z="$(arg mid360_z)"/>
+
+  <joint name="mid360_joint" type="fixed">
+    <parent link="trunk"/>
+    <child link="mid360_link"/>
+    <origin xyz="$(arg mid360_x) $(arg mid360_y) $(arg mid360_z)"
+            rpy="$(arg mid360_roll) $(arg mid360_pitch) $(arg mid360_yaw)"/>
+  </joint>
+  <link name="mid360_link">
+    <!-- Third-party low-poly model: its bottom face origin lies 47 mm below
+         the point-cloud origin. It is not Livox's official CAD model. -->
+    <visual>
+      <origin xyz="0 0 -0.047"/>
+      <geometry><mesh filename="package://aliengo_mid360/meshes/mid360.dae"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.017"/>
+      <geometry><box size="0.065 0.065 0.060"/></geometry>
+    </collision>
+    <!-- 265 g; uniform-box approximation, not measured inertia. -->
+    <inertial>
+      <origin xyz="0 0 -0.017"/>
+      <mass value="0.265"/>
+      <inertia ixx="0.000173" ixy="0" ixz="0" iyy="0.000173" iyz="0" izz="0.000187"/>
+    </inertial>
+  </link>
+
+  <xacro:mid360_imu/>
+
+  <!-- Livox's published MID-360 scan sequence, ray-traced in Gazebo ODE.
+       Fourfold downsampling reduces CPU load; this is not hardware data. -->
+  <gazebo reference="mid360_link">
+    <sensor name="mid360_ray" type="ray">
+      <always_on>true</always_on><update_rate>10</update_rate><visualize>false</visualize>
+      <ray>
+        <scan>
+          <horizontal><samples>2</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>6.283185307</max_angle></horizontal>
+          <vertical><samples>2</samples><resolution>1</resolution><min_angle>-0.126</min_angle><max_angle>0.964</max_angle></vertical>
+        </scan>
+        <range><min>0.1</min><max>100</max><resolution>0.002</resolution></range>
+      </ray>
+      <plugin name="mid360_cloud" filename="liblivox_laser_simulation.so">
+        <ray>
+          <scan>
+            <horizontal><samples>2</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>6.283185307</max_angle></horizontal>
+            <vertical><samples>2</samples><resolution>1</resolution><min_angle>-0.126</min_angle><max_angle>0.964</max_angle></vertical>
+          </scan>
+          <range><min>0.1</min><max>100</max><resolution>0.002</resolution></range>
+        </ray>
+        <visualize>false</visualize><samples>24000</samples><downsample>$(arg mid360_downsample)</downsample>
+        <csv_file_name>/work/src/livox_laser_simulation/scan_mode/mid360.csv</csv_file_name>
+        <ros_topic>/mid360_sim/points_raw</ros_topic><frame_name>mid360_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+</robot>

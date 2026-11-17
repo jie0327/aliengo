@@ -1,0 +1,15 @@
+<launch>
+  <arg name="rviz" default="true"/>
+  <arg name="publish_tf" default="true"/>
+  <arg name="map_dir" default="../../maps/current"/>
+  <param name="/use_sim_time" value="true"/>
+  <rosparam file="$(find aliengo_super_lio)/sim_snapshot.yaml" command="load"/>
+  <param name="/lio/map/save_map_dir" value="$(arg map_dir)"/>
+  <node pkg="super_lio" type="super_lio_node" name="super_lio_node" output="screen"/>
+  <node if="$(arg publish_tf)" pkg="aliengo_super_lio" type="lio_base_tf.py"
+        name="lio_base_tf" output="screen"/>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="super_lio_rviz"
+        args="-d $(find aliengo_super_lio)/mapping.rviz" output="screen">
+    <env name="DISABLE_ROS1_EOL_WARNINGS" value="1"/>
+  </node>
+</launch>

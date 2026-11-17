@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Horizontal simulation mount, not measured hardware or fabrication CAD.
+       The existing trunk -> mid360_link sensor transform stays independent.
+       0.10 kg is an approximate assembly mass, distributed by solid volume.
+       No bracket is generated when the sensor bottom is at/below the trunk top. -->
+  <xacro:macro name="mid360_mount" params="x:=0.25 y:=0 sensor_z:=0.103">
+    <xacro:property name="mount_trunk_top" value="0.056"/>
+    <xacro:property name="mount_height" value="${float(sensor_z) - 0.047 - mount_trunk_top}"/>
+    <xacro:if value="${mount_height > 0}">
+      <xacro:property name="mount_mass" value="0.10"/>
+      <xacro:property name="mount_width" value="0.065"/>
+      <xacro:property name="mount_post_width" value="0.012"/>
+      <xacro:property name="mount_plate_thickness" value="${min(0.005, mount_height / 3.0)}"/>
+      <xacro:property name="mount_post_height" value="${mount_height - mount_plate_thickness}"/>
+      <xacro:property name="mount_post_y" value="${(mount_width - mount_post_width) / 2.0}"/>
+      <xacro:property name="mount_post_z" value="${mount_post_height / 2.0}"/>
+      <xacro:property name="mount_plate_z" value="${mount_height - mount_plate_thickness / 2.0}"/>
+
+      <!-- Equal effective density for the two posts and the top plate. -->
+      <xacro:property name="mount_plate_volume" value="${mount_width * mount_width * mount_plate_thickness}"/>
+      <xacro:property name="mount_post_volume" value="${mount_post_width * mount_post_width * mount_post_height}"/>
+      <xacro:property name="mount_volume" value="${mount_plate_volume + 2.0 * mount_post_volume}"/>
+      <xacro:property name="mount_plate_mass" value="${mount_mass * mount_plate_volume / mount_volume}"/>
+      <xacro:property name="mount_post_mass" value="${mount_mass * mount_post_volume / mount_volume}"/>
+      <xacro:property name="mount_com_z" value="${(mount_plate_mass * mount_plate_z + 2.0 * mount_post_mass * mount_post_z) / mount_mass}"/>
+      <xacro:property name="mount_plate_dz" value="${mount_plate_z - mount_com_z}"/>
+      <xacro:property name="mount_post_dz" value="${mount_post_z - mount_com_z}"/>
+      <xacro:property name="mount_plate_ixy" value="${mount_plate_mass * (mount_width * mount_width + mount_plate_thickness * mount_plate_thickness) / 12.0}"/>
+      <xacro:property name="mount_post_ixy" value="${mount_post_mass * (mount_post_width * mount_post_width + mount_post_height * mount_post_height) / 12.0}"/>
+
+      <joint name="mid360_mount_joint" type="fixed">
+        <parent link="trunk"/>
+        <child link="mid360_mount_link"/>
+        <origin xyz="${x} ${y} ${mount_trunk_top}" rpy="0 0 0"/>
+      </joint>
+      <link name="mid360_mount_link">
+        <visual>
+          <origin xyz="0 0 ${mount_plate_z}"/>
+          <geometry><box size="${mount_width} ${mount_width} ${mount_plate_thickness}"/></geometry>
+          <material name="mid360_mount_metal"><color rgba="0.45 0.47 0.50 1"/></material>
+        </visual>
+        <visual>
+          <origin xyz="0 ${mount_post_y} ${mount_post_z}"/>
+          <geometry><box size="${mount_post_width} ${mount_post_width} ${mount_post_height}"/></geometry>
+          <material name="mid360_mount_metal"/>
+        </visual>
+        <visual>
+          <origin xyz="0 ${-mount_post_y} ${mount_post_z}"/>
+          <geometry><box size="${mount_post_width} ${mount_post_width} ${mount_post_height}"/></geometry>
+          <material name="mid360_mount_metal"/>
+        </visual>
+        <collision>
+          <origin xyz="0 0 ${mount_plate_z}"/>
+          <geometry><box size="${mount_width} ${mount_width} ${mount_plate_thickness}"/></geometry>
+        </collision>
+        <collision>
+          <origin xyz="0 ${mount_post_y} ${mount_post_z}"/>
+          <geometry><box size="${mount_post_width} ${mount_post_width} ${mount_post_height}"/></geometry>
+        </collision>
+        <collision>
+          <origin xyz="0 ${-mount_post_y} ${mount_post_z}"/>
+          <geometry><box size="${mount_post_width} ${mount_post_width} ${mount_post_height}"/></geometry>
+        </collision>
+        <inertial>
+          <origin xyz="0 0 ${mount_com_z}"/>
+          <mass value="${mount_mass}"/>
+          <!-- Box inertias plus the parallel-axis terms about this assembly COM. -->
+          <inertia
+            ixx="${mount_plate_ixy + mount_plate_mass * mount_plate_dz * mount_plate_dz + 2.0 * (mount_post_ixy + mount_post_mass * (mount_post_y * mount_post_y + mount_post_dz * mount_post_dz))}"
+            ixy="0" ixz="0"
+            iyy="${mount_plate_ixy + mount_plate_mass * mount_plate_dz * mount_plate_dz + 2.0 * (mount_post_ixy + mount_post_mass * mount_post_dz * mount_post_dz)}"
+            iyz="0"
+            izz="${mount_plate_mass * mount_width * mount_width / 6.0 + 2.0 * (mount_post_mass * mount_post_width * mount_post_width / 6.0 + mount_post_mass * mount_post_y * mount_post_y)}"/>
+        </inertial>
+      </link>
+      <gazebo reference="mid360_mount_link"><material>Gazebo/Grey</material></gazebo>
+    </xacro:if>
+  </xacro:macro>
+</robot>

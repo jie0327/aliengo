@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>aliengo_fast_livo</name>
+  <version>0.1.0</version>
+  <description>FAST-LIVO2 visual, lidar and inertial mapping for AlienGo simulation</description>
+  <maintainer email="maintainer@example.com">AlienGo Learning</maintainer>
+  <license>GPL-2.0</license>
+  <exec_depend>fast_livo</exec_depend>
+  <exec_depend>aliengo_super_lio</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+</package>

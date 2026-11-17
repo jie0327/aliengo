@@ -1,0 +1,6 @@
+FROM aliengo-learning:exploration
+SHELL ["/bin/bash", "-c"]
+USER root
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ros-noetic-realsense2-camera ros-noetic-realsense2-description ros-noetic-depth-image-proc \
+    && rm -rf /var/lib/apt/lists/*

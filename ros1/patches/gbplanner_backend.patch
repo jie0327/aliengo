@@ -1,0 +1,125 @@
+diff -ruN a/gbplanner/config/bt_xml/aliengo_single_plan.xml b/gbplanner/config/bt_xml/aliengo_single_plan.xml
+--- a/gbplanner/config/bt_xml/aliengo_single_plan.xml	1970-01-01 08:00:00.000000000 +0800
++++ b/gbplanner/config/bt_xml/aliengo_single_plan.xml	2026-11-14 09:14:22.163666102 +0800
+@@ -0,0 +1 @@
++<root BTCPP_format="4" main_tree_to_execute="MainTree"><BehaviorTree ID="MainTree"><LocalExploration /></BehaviorTree></root>
+diff -ruN a/planner_common/include/planner_common/params.h b/planner_common/include/planner_common/params.h
+--- a/planner_common/include/planner_common/params.h	2026-09-14 05:32:59.000000000 +0800
++++ b/planner_common/include/planner_common/params.h	2026-11-14 09:11:18.508883111 +0800
+@@ -117,6 +117,8 @@
+   Eigen::Vector3d center_offset;  // Offset from the body center (odometry).
+   Eigen::Vector3d rotations;      // Body to sensor; [Y, P, R] (rad).
+   Eigen::Vector2d fov;            // [Horizontal, Vertical] angles (rad).
++  bool use_vertical_fov_limits = false;
++  Eigen::Vector2d vertical_fov_limits = Eigen::Vector2d::Zero();
+   Eigen::Vector2d resolution;  // Resolution in rad [H x V] for volumetric gain.
+   std::string sensor_frame;
+   Eigen::Vector2d rot_lims;    // Min and max rotation limits in rad for camera.
+diff -ruN a/planner_common/src/params.cpp b/planner_common/src/params.cpp
+--- a/planner_common/src/params.cpp	2026-09-14 05:32:59.000000000 +0800
++++ b/planner_common/src/params.cpp	2026-11-14 09:11:18.508883111 +0800
+@@ -92,6 +92,20 @@
+     ROSPARAM_WARN(param_name, "{1.57, 1.04719}");
+   }
+   fov << param_val[0], param_val[1];
++  use_vertical_fov_limits = false;
++  param_name = ns + "/vertical_fov_limits";
++  if (ros::param::has(param_name)) {
++    param_val.clear();
++    if (type != SensorType::kLidar || !ros::param::get(param_name, param_val) || param_val.size() != 2 ||
++        !std::isfinite(param_val[0]) || !std::isfinite(param_val[1]) ||
++        param_val[0] < -M_PI / 2 || param_val[1] > M_PI / 2 || param_val[0] >= param_val[1]) {
++      ROSPARAM_ERROR(param_name);
++      return false;
++    }
++    vertical_fov_limits << param_val[0], param_val[1];
++    fov[1] = vertical_fov_limits[1] - vertical_fov_limits[0];
++    use_vertical_fov_limits = true;
++  }
+ 
+   param_val.clear();
+   param_name = ns + "/resolution";
+@@ -230,14 +244,17 @@
+     width = 0;
+     double h_lim_2 = fov[0] / 2;
+     double v_lim_2 = fov[1] / 2;
+-    for (double dv = -v_lim_2; dv < v_lim_2; dv += v_res) {
++    const double v_low = use_vertical_fov_limits ? vertical_fov_limits[0] : -v_lim_2;
++    const double v_high = use_vertical_fov_limits ? vertical_fov_limits[1] : v_lim_2;
++    for (double dv = v_low; dv < v_high; dv += v_res) {
+       ++h;
+       for (double dh = -h_lim_2; dh < h_lim_2; dh += h_res) {
+         if (width == 0) {
+           ++w;
+         }
+-        double x = max_range * cos(dh);
+-        double y = max_range * sin(dh);
++        double horizontal_scale = use_vertical_fov_limits ? cos(dv) : 1.0;
++        double x = max_range * horizontal_scale * cos(dh);
++        double y = max_range * horizontal_scale * sin(dh);
+         double z = max_range * sin(dv);
+         Eigen::Vector3d ep = Eigen::Vector3d(x, y, z);
+         frustum_endpoints.push_back(ep);
+@@ -338,10 +355,13 @@
+             Eigen::AngleAxisd(rotations[1], Eigen::Vector3d::UnitY()) *
+             Eigen::AngleAxisd(rotations[2], Eigen::Vector3d::UnitX());
+   rot_S2B = rot_B2S.inverse();
++  if (use_vertical_fov_limits) fov[1] = vertical_fov_limits[1] - vertical_fov_limits[0];
+   // ROS_INFO_COND(global_verbosity >= Verbosity::INFO, "[PARAMS]: fov: h: %f v: %f", fov[0], fov[1]);
+   double v_res, h_res;
+   v_res = (resolution[1] > 0) ? resolution[1] : (1.0 * M_PI / 180.0);
+   h_res = (resolution[0] > 0) ? resolution[0] : (1.0 * M_PI / 180.0);
++  if (use_vertical_fov_limits)
++    num_voxels_full_fov = (fov[0] / h_res) * (fov[1] / v_res) * max_range;
+   if (type == SensorType::kCamera) {
+     // Compute 4 normal vectors for left, right, top, down planes.
+     // First, compute 4 coner points.
+@@ -390,10 +410,13 @@
+     frustum_endpoints_B.clear();
+     double h_lim_2 = fov[0] / 2;
+     double v_lim_2 = fov[1] / 2;
+-    for (double dv = -v_lim_2; dv < v_lim_2; dv += v_res) {
++    const double v_low = use_vertical_fov_limits ? vertical_fov_limits[0] : -v_lim_2;
++    const double v_high = use_vertical_fov_limits ? vertical_fov_limits[1] : v_lim_2;
++    for (double dv = v_low; dv < v_high; dv += v_res) {
+       for (double dh = -h_lim_2; dh < h_lim_2; dh += h_res) {
+-        double x = max_range * cos(dh);
+-        double y = max_range * sin(dh);
++        double horizontal_scale = use_vertical_fov_limits ? cos(dv) : 1.0;
++        double x = max_range * horizontal_scale * cos(dh);
++        double y = max_range * horizontal_scale * sin(dh);
+         double z = max_range * sin(dv);
+         Eigen::Vector3d ep = Eigen::Vector3d(x, y, z);
+         frustum_endpoints.push_back(ep);
+@@ -477,7 +500,14 @@
+       rot_S2B * Eigen::AngleAxisd(-state[3], Eigen::Vector3d::UnitZ()) * Eigen::AngleAxisd(-state[4], Eigen::Vector3d::UnitY()) *
+           (pos - origin) -
+       center_offset;
++  if (use_vertical_fov_limits) {
++    // Offset is expressed in the body frame, before the sensor rotation.
++    Eigen::Matrix3d body_rotation = (Eigen::AngleAxisd(state[3], Eigen::Vector3d::UnitZ()) *
++                                   Eigen::AngleAxisd(state[4], Eigen::Vector3d::UnitY())).toRotationMatrix();
++    pos_S = rot_S2B * (body_rotation.transpose() * (pos - origin) - center_offset);
++  }
+   float pos_S_norm = pos_S.norm();
++  if (use_vertical_fov_limits && (pos_S_norm < min_range || pos_S_norm < 1e-9)) return false;
+ 
+   // Check range.
+   if (pos_S_norm > max_range) return false;
+@@ -492,9 +522,14 @@
+     // @TODO: this might be very costly.
+     float h_angle = std::atan2((float)pos_S.y(), (float)pos_S.x());
+     float v_angle = std::asin((float)pos_S.z() / pos_S_norm);
+-    if ((std::abs(h_angle) > (fov[0] / 2)) ||
+-        (std::abs(v_angle) > (fov[1] / 2)))
++    if (use_vertical_fov_limits) {
++      if (std::abs(h_angle) > fov[0] / 2 + 1e-6 ||
++          v_angle < vertical_fov_limits[0] - 1e-6 || v_angle > vertical_fov_limits[1] + 1e-6)
++        return false;
++    } else if ((std::abs(h_angle) > (fov[0] / 2)) ||
++               (std::abs(v_angle) > (fov[1] / 2))) {
+       return false;
++    }
+   } else {
+     // Unsupported sensor.
+     return false;

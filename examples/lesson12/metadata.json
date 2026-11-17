@@ -1,0 +1,61 @@
+{
+  "schema": "lesson12-fixture-v1",
+  "observation_dim": 45,
+  "observation_terms": [
+    "body_omega",
+    "projected_gravity",
+    "command",
+    "q_minus_default",
+    "dq",
+    "previous_action"
+  ],
+  "quaternion_order": "xyzw",
+  "quaternion_rotation": "body_to_world",
+  "world_up": "z",
+  "joint_names": [
+    "FR_hip_joint",
+    "FR_thigh_joint",
+    "FR_calf_joint",
+    "FL_hip_joint",
+    "FL_thigh_joint",
+    "FL_calf_joint",
+    "RR_hip_joint",
+    "RR_thigh_joint",
+    "RR_calf_joint",
+    "RL_hip_joint",
+    "RL_thigh_joint",
+    "RL_calf_joint"
+  ],
+  "default_q": [
+    0.0,
+    0.8,
+    -1.5,
+    0.0,
+    0.8,
+    -1.5,
+    0.0,
+    0.8,
+    -1.5,
+    0.0,
+    0.8,
+    -1.5
+  ],
+  "omega_scale": 0.25,
+  "command_scale": [
+    2.0,
+    2.0,
+    0.25
+  ],
+  "q_scale": 1.0,
+  "dq_scale": 0.05,
+  "clip_observation": 10.0,
+  "clip_action": 1.0,
+  "action_scale": 0.25,
+  "history_steps": 3,
+  "history_order": "oldest_to_newest_zero_padding",
+  "pd_dt": 0.002,
+  "decimation": 10,
+  "policy_dt": 0.02,
+  "dt_tolerance": 0.0005,
+  "max_age": 0.05
+}

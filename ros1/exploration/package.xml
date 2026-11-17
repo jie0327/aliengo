@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>aliengo_exploration</name><version>0.1.0</version>
+  <description>Observed-ground GBPlanner exploration for the AlienGo learning simulation</description>
+  <maintainer email="maintainer@example.com">AlienGo Learning</maintainer>
+  <license>BSD-3-Clause</license>
+  <exec_depend>rospy</exec_depend><exec_depend>std_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend><exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend><exec_depend>nav_msgs</exec_depend>
+  <exec_depend>rosgraph_msgs</exec_depend><exec_depend>grid_map_msgs</exec_depend>
+  <exec_depend>tf</exec_depend><exec_depend>tf2_ros</exec_depend>
+  <exec_depend>python3-numpy</exec_depend><exec_depend>planner_msgs</exec_depend>
+  <exec_depend>gbplanner</exec_depend><exec_depend>aliengo_super_lio</exec_depend>
+  <exec_depend>rviz</exec_depend>
+</package>

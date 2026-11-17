@@ -1,0 +1,3024 @@
+{
+  "result": "PASS",
+  "bag": "/input/sensors.bag",
+  "output": "/result",
+  "wall_timeout_seconds": 300,
+  "commands": {
+    "mapping": [
+      "roslaunch",
+      "aliengo_super_lio",
+      "mapping.launch",
+      "rviz:=false",
+      "publish_tf:=false",
+      "map_dir:=../../../result/maps"
+    ],
+    "playback": [
+      "rosbag",
+      "play",
+      "--clock",
+      "--hz=500",
+      "--delay=1",
+      "/input/sensors.bag",
+      "--topics",
+      "/livox/lidar",
+      "/livox/imu"
+    ]
+  },
+  "graph_snapshots": [
+    {
+      "wall": 2.104890727001475,
+      "nodes": [
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 2.11834807500054,
+      "nodes": [
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 2.6254770810010086,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 3.128793357001996,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 3.634662680000474,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 4.141926373999013,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 4.648654681001062,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 5.155352739999216,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 5.661052723000466,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 6.164617062000616,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 6.6685555030016985,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 7.173282494000887,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 7.677871793999657,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 8.183233671999915,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 8.686196855000162,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 9.189662642998883,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 9.696254200000112,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 10.202400246998877,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 10.708095893001882,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 11.21124196800156,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 11.714328230998944,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 12.218330636002065,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 12.739878031999979,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 13.245699630999297,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 13.75267724600053,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 14.258897675001208,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 14.764701480999065,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 15.26869397200062,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 15.773350349001703,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 16.280306673001178,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 16.787138579002203,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 17.294428413999412,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 17.801717368001846,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 18.30512427299982,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 18.81154400200103,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 19.317489020999346,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 19.823376451000513,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 20.328830465001374,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 20.834709827999177,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 21.33754975100237,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 21.843176571001095,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 22.349277523000637,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 22.85661484999946,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 23.363011999001174,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 23.868775742001162,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 24.375980561999313,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 24.88026130900107,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 25.38604522300011,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 25.893075374002365,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 26.39889830299944,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 26.90557178200106,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 27.41121343800114,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 27.917151694000495,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 28.42339477800124,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 28.928682066001784,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 29.433143600999756,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 29.93986521899933,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 30.44729653399918,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 30.953849829998944,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 31.461432912001328,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 31.96457247500075,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 32.46864096599893,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 32.97285152599943,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 33.47933023800215,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 33.98554994799997,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 34.491596068000945,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 34.996971690001374,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 35.50281847400038,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 36.00893085700227,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 36.51512616900072,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 37.02175221300058,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 37.527493610999954,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 38.034045238000544,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 38.53950827100198,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 39.046957179001765,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 39.55430912600059,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 40.06066938799995,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 40.56513474000167,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 41.06954975999906,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 41.57421101900036,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 42.07744590099901,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 42.58133831300074,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 43.08934614499958,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 43.59592083800089,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 44.101333856000565,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 44.60692606000157,
+      "nodes": [
+        "/play_1794591901341641795",
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 45.112360187999,
+      "nodes": [
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    },
+    {
+      "wall": 45.71841564799979,
+      "nodes": [
+        "/rosout",
+        "/super_lio_node",
+        "/super_lio_replay"
+      ],
+      "gazebo_nodes": [],
+      "get_model_state_services": [],
+      "truth_topics": [],
+      "output_publishers": {
+        "/lio/odom": [
+          "/super_lio_node"
+        ],
+        "/lio/path": [
+          "/super_lio_node"
+        ],
+        "/lio/cloud_world": [
+          "/super_lio_node"
+        ]
+      },
+      "lio_inputs": {
+        "/super_lio_node": [
+          "/clock",
+          "/livox/imu",
+          "/livox/lidar"
+        ]
+      }
+    }
+  ],
+  "failures": [],
+  "bag_topics": {
+    "/clock": {
+      "type": "rosgraph_msgs/Clock",
+      "messages": 206613
+    },
+    "/livox/imu": {
+      "type": "sensor_msgs/Imu",
+      "messages": 8251
+    },
+    "/livox/lidar": {
+      "type": "sensor_msgs/PointCloud2",
+      "messages": 413
+    }
+  },
+  "bag_duration_seconds": 41.322199999999995,
+  "bag_sensor_only": true,
+  "use_sim_time": true,
+  "lio_sensor_only_graph": true,
+  "playback_returncode": 0,
+  "mapping_returncode": 0,
+  "input_message_counts": {
+    "clock": 19801,
+    "lidar": 413,
+    "imu": 8251
+  },
+  "odom_count": 406,
+  "cloud_count": 405,
+  "path_count": 10,
+  "max_displacement_xy_m": 0.973064193977505,
+  "pcd_files": [
+    {
+      "path": "/result/maps/PCD/scans_0.pcd",
+      "bytes": 728316,
+      "points": 45508,
+      "payload_bytes": 728128,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_1.pcd",
+      "bytes": 721212,
+      "points": 45064,
+      "payload_bytes": 721024,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_10.pcd",
+      "bytes": 722812,
+      "points": 45164,
+      "payload_bytes": 722624,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_11.pcd",
+      "bytes": 713676,
+      "points": 44593,
+      "payload_bytes": 713488,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_12.pcd",
+      "bytes": 720988,
+      "points": 45050,
+      "payload_bytes": 720800,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_13.pcd",
+      "bytes": 727596,
+      "points": 45463,
+      "payload_bytes": 727408,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_14.pcd",
+      "bytes": 715388,
+      "points": 44700,
+      "payload_bytes": 715200,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_15.pcd",
+      "bytes": 716284,
+      "points": 44756,
+      "payload_bytes": 716096,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_16.pcd",
+      "bytes": 724076,
+      "points": 45243,
+      "payload_bytes": 723888,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_17.pcd",
+      "bytes": 716668,
+      "points": 44780,
+      "payload_bytes": 716480,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_18.pcd",
+      "bytes": 713788,
+      "points": 44600,
+      "payload_bytes": 713600,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_19.pcd",
+      "bytes": 722892,
+      "points": 45169,
+      "payload_bytes": 722704,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_2.pcd",
+      "bytes": 725692,
+      "points": 45344,
+      "payload_bytes": 725504,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_20.pcd",
+      "bytes": 719820,
+      "points": 44977,
+      "payload_bytes": 719632,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_21.pcd",
+      "bytes": 710300,
+      "points": 44382,
+      "payload_bytes": 710112,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_22.pcd",
+      "bytes": 715292,
+      "points": 44694,
+      "payload_bytes": 715104,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_23.pcd",
+      "bytes": 723020,
+      "points": 45177,
+      "payload_bytes": 722832,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_24.pcd",
+      "bytes": 713612,
+      "points": 44589,
+      "payload_bytes": 713424,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_25.pcd",
+      "bytes": 712732,
+      "points": 44534,
+      "payload_bytes": 712544,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_26.pcd",
+      "bytes": 724924,
+      "points": 45296,
+      "payload_bytes": 724736,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_27.pcd",
+      "bytes": 716572,
+      "points": 44774,
+      "payload_bytes": 716384,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_28.pcd",
+      "bytes": 712316,
+      "points": 44508,
+      "payload_bytes": 712128,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_29.pcd",
+      "bytes": 718412,
+      "points": 44889,
+      "payload_bytes": 718224,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_3.pcd",
+      "bytes": 732428,
+      "points": 45765,
+      "payload_bytes": 732240,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_30.pcd",
+      "bytes": 722396,
+      "points": 45138,
+      "payload_bytes": 722208,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_31.pcd",
+      "bytes": 716716,
+      "points": 44783,
+      "payload_bytes": 716528,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_32.pcd",
+      "bytes": 722124,
+      "points": 45121,
+      "payload_bytes": 721936,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_33.pcd",
+      "bytes": 731404,
+      "points": 45701,
+      "payload_bytes": 731216,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_34.pcd",
+      "bytes": 721196,
+      "points": 45063,
+      "payload_bytes": 721008,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_35.pcd",
+      "bytes": 723292,
+      "points": 45194,
+      "payload_bytes": 723104,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_36.pcd",
+      "bytes": 734668,
+      "points": 45905,
+      "payload_bytes": 734480,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_37.pcd",
+      "bytes": 721004,
+      "points": 45051,
+      "payload_bytes": 720816,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_38.pcd",
+      "bytes": 716156,
+      "points": 44748,
+      "payload_bytes": 715968,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_39.pcd",
+      "bytes": 726428,
+      "points": 45390,
+      "payload_bytes": 726240,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_4.pcd",
+      "bytes": 719180,
+      "points": 44937,
+      "payload_bytes": 718992,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_40.pcd",
+      "bytes": 431388,
+      "points": 26950,
+      "payload_bytes": 431200,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_5.pcd",
+      "bytes": 719308,
+      "points": 44945,
+      "payload_bytes": 719120,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_6.pcd",
+      "bytes": 729436,
+      "points": 45578,
+      "payload_bytes": 729248,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_7.pcd",
+      "bytes": 721132,
+      "points": 45059,
+      "payload_bytes": 720944,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_8.pcd",
+      "bytes": 718764,
+      "points": 44911,
+      "payload_bytes": 718576,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/PCD/scans_9.pcd",
+      "bytes": 726940,
+      "points": 45422,
+      "payload_bytes": 726752,
+      "valid": true,
+      "updated_this_run": true
+    },
+    {
+      "path": "/result/maps/depot.pcd",
+      "bytes": 967468,
+      "points": 60455,
+      "payload_bytes": 967280,
+      "valid": true,
+      "updated_this_run": true
+    }
+  ],
+  "checks": {
+    "odometry_received": true,
+    "finite_lio_map_poses": true,
+    "registered_cloud_nonempty": true,
+    "path_nonempty": true,
+    "estimated_motion_over_0_3m": true,
+    "nonempty_new_final_pcd": true
+  },
+  "wall_seconds": 47.401279198998964
+}

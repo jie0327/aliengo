@@ -1,0 +1,16 @@
+# Copy to .hardware/robot.yaml. xyz: metres; rpy: radians; base = trunk origin.
+# Fill measured transforms to the sensor coordinate origins, not case surfaces.
+base_to_mid360:
+  xyz: [null, null, null]
+  rpy: [0.0, 0.0, 0.0]
+base_to_d435:
+  xyz: [null, null, null]
+  rpy: [0.0, 0.0, 0.0]
+imu_acceleration_scale: 9.80665  # pinned Livox driver gives g; SI drivers use 1.0
+camera_serial: ""              # single connected D435; set serial for multiple cameras
+robot_ip: 192.168.123.220      # vendor AlienGo v3.8.4 example; verify device address
+robot_port: 8082
+local_port: 8081
+motion_program_version: "1.0.20" # previous read-only connection record
+hardware_revision: null          # SDK README: H0.1.7 or H0.1.9
+firmware_version: null           # SDK README: >=0.1.35; verify on the robot

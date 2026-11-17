@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "name": "gbplanner",
+      "url": "https://github.com/ntnu-arl/gbplanner_ros.git",
+      "branch": "gbplanner3",
+      "commit": "f9904bb69392d2d46b2cbe939762f967a65daa14",
+      "path": "references/gbplanner"
+    },
+    {
+      "name": "BehaviorTree.CPP",
+      "url": "https://github.com/ntnu-arl/BehaviorTree.CPP.git",
+      "branch": "catkin_support",
+      "commit": "d1983e6272d8679724720f687be22f6d0240ef34",
+      "path": "references/gbp_deps/BehaviorTree.CPP"
+    },
+    {
+      "name": "adaptive_obb_ros",
+      "url": "https://github.com/ntnu-arl/adaptive_obb_ros.git",
+      "branch": "gbplanner3",
+      "commit": "7a6a9f244ec35800808cb4610931f09c1ff8c4a8",
+      "path": "references/gbp_deps/adaptive_obb_ros"
+    },
+    {
+      "name": "catkin_simple",
+      "url": "https://github.com/catkin/catkin_simple.git",
+      "branch": "master",
+      "commit": "0e62848b12da76c8cc58a1add42b4f894d1ac21e",
+      "path": "references/gbp_deps/catkin_simple"
+    },
+    {
+      "name": "eigen_catkin",
+      "url": "https://github.com/ethz-asl/eigen_catkin.git",
+      "branch": "master",
+      "commit": "3323b388540fa95ec9da6f9cd887f70ead055edb",
+      "path": "references/gbp_deps/eigen_catkin"
+    },
+    {
+      "name": "eigen_checks",
+      "url": "https://github.com/ethz-asl/eigen_checks.git",
+      "branch": "master",
+      "commit": "22a6247a3df11bc285d43d1a030f4e874a413997",
+      "path": "references/gbp_deps/eigen_checks"
+    },
+    {
+      "name": "gflags_catkin",
+      "url": "https://github.com/ethz-asl/gflags_catkin.git",
+      "branch": "master",
+      "commit": "fc38fc525f7d48881aebb27a7b9978453556bbd4",
+      "path": "references/gbp_deps/gflags_catkin"
+    },
+    {
+      "name": "glog_catkin",
+      "url": "https://github.com/ethz-asl/glog_catkin.git",
+      "branch": "master",
+      "commit": "40a9edadd15c59f8b57dc947d0135b0a007ea10b",
+      "path": "references/gbp_deps/glog_catkin"
+    },
+    {
+      "name": "mav_comm",
+      "url": "https://github.com/ethz-asl/mav_comm.git",
+      "branch": "master",
+      "commit": "56122218eb1ec34deaa641598ebacf24e26c349b",
+      "path": "references/gbp_deps/mav_comm"
+    },
+    {
+      "name": "minkindr",
+      "url": "https://github.com/ethz-asl/minkindr.git",
+      "branch": "master",
+      "commit": "564f12639a8447d4d3e5e7707851424302941056",
+      "path": "references/gbp_deps/minkindr"
+    },
+    {
+      "name": "minkindr_ros",
+      "url": "https://github.com/ethz-asl/minkindr_ros.git",
+      "branch": "master",
+      "commit": "5528b042124fe056a7cf53f96c8b39e1e32ec2b9",
+      "path": "references/gbp_deps/minkindr_ros"
+    },
+    {
+      "name": "pci_general",
+      "url": "https://github.com/ntnu-arl/pci_general.git",
+      "branch": "gbplanner3",
+      "commit": "91fee4af0e758b974923b945121af7b9a2e2e459",
+      "path": "references/gbp_deps/pci_general"
+    },
+    {
+      "name": "protobuf_catkin",
+      "url": "https://github.com/ethz-asl/protobuf_catkin.git",
+      "branch": "master",
+      "commit": "721a6cc17e7e937e7accfb88a9967b26134db6f9",
+      "path": "references/gbp_deps/protobuf_catkin"
+    },
+    {
+      "name": "voxblox",
+      "url": "https://github.com/ntnu-arl/voxblox.git",
+      "branch": "feature/esdf_colorization",
+      "commit": "d1db0e19049fb441655eddefcdba9c9af596ead7",
+      "path": "references/gbp_deps/voxblox"
+    }
+  ],
+  "dependency_image": "aliengo-exploration:simulation",
+  "dependency_image_id": "sha256:1874ecd35a34f6dd47d32becda8fb85b2c67f273a400413d95dfd297c8e1c5d8"
+}

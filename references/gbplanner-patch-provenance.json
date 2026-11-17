@@ -1,0 +1,33 @@
+{
+  "original_sources": "gbplanner-sources.lock.json",
+  "vendoring": "git archive of the 14 locked commits from /home/jack/ros2_ws read-only source cache",
+  "gain_patch": {
+    "source": "/home/jack/ros2_ws/patches/gbplanner-asymmetric-lidar.patch",
+    "reuse": "Same SensorParamsBase asymmetric FOV implementation; no old robot extrinsics or gain configuration reused",
+    "verification": "tests/gbplanner/lidar_gain_fov.cpp"
+  },
+  "runtime": "aliengo-learning:exploration overrides cached image entrypoint; only current project launch files are used",
+  "geometry": "Original nominal .75 x .45 x .34m body/mount box; actual segment orientation and local turn angle, no extra size or clearance. Not a full-leg/gait or hardware-calibrated model.",
+  "raycast_patch": {
+    "source": "Pinned Voxblox integrator_utils.cc uses abs(component)<0.0, so exactly zero components divide 0/0. Local patch checks exact zero before DDA divisions.",
+    "patch": "ros1/patches/gbplanner_voxblox_raycast.patch",
+    "verification": "raycaster_axes.cpp RED against cached core; GREEN against current overlay core for all six cardinal directions. Actual 90-degree rotated camera ray passes ROS TSDF integration test.",
+    "loader": "Final integration ldd verified libvoxblox.so, libvoxblox_proto.so and libvoxblox_ros.so all resolve under /gbp/devel/lib/ (current overlay symlinks)."
+  },
+  "spatial_logic": {
+    "removed": "Custom root/body/full-footprint/path/prefix checks, custom check_path service and planner_check_path.srv removed from source; official startup map reset and augmentFreeBox retained unchanged.",
+    "historical_policy": "Unmodified official pinned GBPlanner spatial checking per latest explicit user override: 就先用官方的检查逻辑，不要新加安全校验",
+    "policy": "User requested minimal additions to official checks. Fix oriented full-body translation/turn geometry and non-free path rejection inside GBPlanner, preserving footprint, follower parameters and unknown-space policy. No custom check_path service.",
+    "historical_unmodified_verification": "logs/gbplanner-integration/official-source-verification.json records SHA256 and exact byte equality against pinned originals",
+    "patch": "ros1/patches/gbplanner_turn_clearance.patch",
+    "verification": "logs/gbplanner-turn-clearance/backend-final-current.log: real linked MapManager32/32, Rrg output2/2, coordinator ROS12/12 and two actual planner paths. Final Depot GPlLEh PASS13/13; host195 passed/23 skipped. verification-manifest.json records current source hashes and prefix-heading error.",
+    "unchanged": "Pinned references remain pristine; official startup map reset and original augmentFreeBox clearing range retained.",
+    "historically_restored_original_files": [
+      "gbplanner/src/rrg.cpp",
+      "gbplanner/include/gbplanner/rrg.h",
+      "gbplanner/include/gbplanner/gbplanner.h",
+      "gbplanner/src/gbplanner_ros.cpp",
+      "planner_msgs/CMakeLists.txt"
+    ]
+  }
+}

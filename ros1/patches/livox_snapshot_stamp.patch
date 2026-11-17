@@ -1,0 +1,23 @@
+--- livox_laser_simulation/src/livox_points_plugin.cpp
++++ livox_laser_simulation/src/livox_points_plugin.cpp
+@@ -112,8 +112,10 @@
+         std::vector<std::pair<int, AviaRotateInfo>> points_pair;
+         InitializeRays(points_pair, rayShape);
+         rayShape->Update();
++        // Use the world simulation clock after the ray query; UpdateRays owns its physics lock.
++        const common::Time scan_time = world->SimTime();
+ 
+-        msgs::Set(laserMsg.mutable_time(), world->SimTime());
++        msgs::Set(laserMsg.mutable_time(), scan_time);
+         msgs::LaserScan *scan = laserMsg.mutable_scan();
+         InitializeScan(scan);
+ 
+@@ -127,7 +129,7 @@
+         auto verticle_incre = VerticalAngleResolution();
+ 
+         sensor_msgs::PointCloud scan_point;
+-        scan_point.header.stamp = ros::Time::now();
++        scan_point.header.stamp = ros::Time(scan_time.sec, scan_time.nsec);
+         scan_point.header.frame_id = sdfPtr->Get<std::string>("frame_name");
+         auto &scan_points = scan_point.points;
+ 

@@ -1,0 +1,28 @@
+{
+  "repository": "https://github.com/hku-mars/FAST-LIVO2.git",
+  "commit": "0d2c0346107b75b59934975adec9a6eeeb913c64",
+  "reference_path": "references/FAST-LIVO2",
+  "workspace": ".fast_livo",
+  "license": "GPL-2.0",
+  "patch": "ros1/patches/fast_livo_sim.patch",
+  "image": "aliengo-learning:noetic-fast-livo",
+  "dependencies": [
+    {
+      "repository": "https://github.com/xuankuzcr/rpg_vikit.git",
+      "commit": "6c886c8e5d83997806e00294826d528cea3581dd",
+      "reference_path": "references/rpg_vikit",
+      "workspace_path": "rpg_vikit",
+      "kind": "vikit",
+      "adaptation": "Build copied vikit_common with -O2 instead of -O3."
+    },
+    {
+      "repository": "https://github.com/strasdat/Sophus.git",
+      "commit": "a621ff2e56c56c839a6c40418d42c3c254424b5c",
+      "reference_path": "references/Sophus-fast-livo",
+      "workspace_path": "Sophus",
+      "kind": "sophus",
+      "adaptation": "Use std::complex constructor for SO2 identity under modern C++; build separately from catkin with -O2."
+    }
+  ],
+  "livox_messages": "Use CustomMsg.h and CustomPoint.h vendored by the pinned FAST-LIVO2 source; no hardware driver or SDK is built."
+}

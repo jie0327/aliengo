@@ -1,0 +1,146 @@
+# Nominal current simulation geometry; not factory-calibrated extrinsics.
+# URDF trunk .647 x .150 x .112m; nominal body/mount box .75 x .45 x .34m.
+# This is not a full leg/gait collision model; lidar collision top base+.116m.
+# Repair the existing box/line collision geometry without added clearance.
+collision_geometry_fix: true
+RobotParams:
+  type: kGroundRobot
+  size:
+  - 0.75
+  - 0.45
+  - 0.34
+  size_extension_min:
+  - 0
+  - 0
+  - 0
+  size_extension:
+  - 0
+  - 0
+  - 0
+  center_offset:
+  - 0
+  - 0
+  - 0
+  safety_extension:
+  - 0
+  - 0
+  - 0
+  bound_mode: kExactBound
+  footprint:
+  - 0.75
+  - 0.45
+SensorParams:
+  sensor_list: &id001
+  - MID360
+  MID360: &id002
+    type: kLidar
+    min_range: 0.5
+    max_range: 8
+    center_offset:
+    - 0.25
+    - 0
+    - 0.103
+    rotations:
+    - 0.0
+    - 0.0
+    - 0.0
+    sensor_frame: mid360_link
+    frame_id: mid360_link
+    fov:
+    - 6.283185307179586
+    - 1.09
+    resolution:
+    - 0.17453292519943295
+    - 0.08726646259971647
+    frontier_percentage_threshold: 0.01
+    vertical_fov_limits:
+    - -0.126
+    - 0.964
+CameraAnnotationParams:
+  sensor_list: *id001
+  MID360: *id002
+BoundedSpaceParams:
+  Global:
+    type: kCuboid
+    min_val:
+    - -20
+    - -20
+    - -3
+    max_val:
+    - 20
+    - 20
+    - 5
+  Local:
+    type: kCuboid
+    min_val:
+    - -3.0
+    - -3.0
+    - -1.0
+    max_val:
+    - 3.0
+    - 3.0
+    - 1.0
+  LocalSearch:
+    type: kCuboid
+    min_val:
+    - -5.0
+    - -5.0
+    - -1.0
+    max_val:
+    - 5.0
+    - 5.0
+    - 1.0
+  LocalAdaptiveExp:
+    type: kCuboid
+    min_val:
+    - -3.0
+    - -3.0
+    - -1.0
+    max_val:
+    - 3.0
+    - 3.0
+    - 1.0
+PlanningParams:
+  global_frame_id: lio_map
+  exp_sensor_list:
+  - MID360
+  inspection_sensor_list:
+  - MID360
+  use_current_state: true
+  num_vertices_max: 160
+  num_edges_max: 1000
+  num_loops_cutoff: 1000
+  num_loops_max: 2500
+  edge_length_min: 0.2
+  edge_length_max: 1.0
+  nearest_range_min: 0.2
+  nearest_range_max: 1.0
+  nearest_range: 1.0
+  v_max: 0.12
+  v_homing_max: 0.12
+  yaw_rate_max: 0.3
+  robot_height: 0.43
+  max_ground_height: 0.43
+  max_inclination: 0.17453292519943295
+  auto_homing_enable: false
+  auto_global_planner_enable: false
+  auto_landing_enable: false
+  go_home_if_fully_explored: false
+  free_frustum_before_planning: false
+  freespace_cloud_enable: false
+  annotate_map_with_camera: false
+  use_camera_gain: false
+  inspection_planning: false
+  exploration_only: true
+  enable_opening_traversal: false
+  auto_opening_path_approval: false
+  max_exploration_iterations: 1
+  compartment_centers: []
+  geofence_checking_enable: false
+RobotDynamics:
+  v_max: 0.12
+  v_homing_max: 0.12
+  yaw_rate_max: 0.3
+DarpaGateParams:
+  enable: false
+  load_from_darpa_frame: false

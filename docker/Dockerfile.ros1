@@ -1,0 +1,15 @@
+FROM ros:noetic-ros-base-focal
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Gazebo Classic and the ROS 1 controller packages used by the isolated
+# AlienGo workspace. ROS Noetic's final snapshot is configured by the base image.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake pkg-config libeigen3-dev liblcm-dev \
+    ros-noetic-gazebo-ros-pkgs ros-noetic-gazebo-ros-control \
+    ros-noetic-ros-control ros-noetic-ros-controllers \
+    ros-noetic-robot-state-publisher ros-noetic-xacro ros-noetic-tf \
+    ros-noetic-message-generation ros-noetic-message-runtime \
+    python3-numpy python3-scipy python3-matplotlib \
+    libgl1-mesa-dri libgl1-mesa-glx xvfb xauth \
+    && rm -rf /var/lib/apt/lists/*

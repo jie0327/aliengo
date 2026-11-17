@@ -1,0 +1,253 @@
+{
+  "date": "2026-11-09",
+  "environment": {
+    "os": "Ubuntu 20.04 (container)",
+    "ros": "noetic",
+    "simulator": "Gazebo Classic 11",
+    "gazebo_version": "11.15.1",
+    "container_base": "ros:noetic-ros-base-focal",
+    "container_base_image_id": "sha256:72b8bc59035dc0a5b8e07aae28c16caa84192971d72d207c72ed734fb1d5e97d",
+    "container_image": "aliengo-learning:noetic",
+    "container_image_id": "sha256:d7be024e32be5a1433f5e7e22e20b75951d1645d734f296d7e3f7c8b1187433a",
+    "dockerfile": "docker/Dockerfile.ros1",
+    "roscpp_version": "1.17.4-1focal.20250519.225343",
+    "gazebo_ros_control_version": "2.9.3-1focal.20250521.005335",
+    "python_packages": {
+      "numpy": "1.17.4",
+      "scipy": "1.3.3",
+      "matplotlib": "3.1.2"
+    },
+    "note": "ROS Noetic final 快照；Ubuntu 软件包未全部固定版本，后续重建依赖软件源；该镜像尚未安装 PyTorch。",
+    "visualization_image": "aliengo-learning:noetic-viz",
+    "visualization_image_id": "sha256:30f7b9e14da0b7b5da8f443e4a9adfe572def245e886af6f80bc86838f6b304f",
+    "lio_image": "aliengo-learning:noetic-lio",
+    "lio_image_id": "sha256:2d305de47525251bed241f126078ddc228f6a97de3dbf2b9a8b93da1b52eb94a"
+  },
+  "repositories": [
+    {
+      "path": "references/unitree_ros",
+      "url": "https://github.com/unitreerobotics/unitree_ros.git",
+      "requested_ref": "master",
+      "commit": "725b59b6de39a26c425632120c89f23c49a36f1e",
+      "role": "ROS 1 AlienGo 模型、Gazebo 与关节控制源码",
+      "sparse_paths": [
+        "robots/aliengo_description",
+        "unitree_controller",
+        "unitree_gazebo",
+        "unitree_legged_control",
+        "unitree_ros_to_real"
+      ]
+    },
+    {
+      "path": "references/unitree_guide",
+      "url": "https://github.com/unitreerobotics/unitree_guide.git",
+      "requested_ref": "main",
+      "commit": "fdf4d23de6affe8ee38fb4d892f61053fa1fcbcb",
+      "role": "ROS 1 四足控制教学源码，AlienGo 参数见 ros1/aliengo-guide.patch"
+    },
+    {
+      "path": "references/unitree_legged_sdk",
+      "url": "https://github.com/unitreerobotics/unitree_legged_sdk.git",
+      "requested_ref": "v3.3.1",
+      "commit": "20929b54030c0d8ca4e7ac49ec2a02c447cb9fcd",
+      "role": "声明支持 AlienGo 的 SDK 协议参考，实际须匹配固件"
+    },
+    {
+      "path": "references/unitree_ros/unitree_ros_to_real",
+      "url": "https://github.com/unitreerobotics/unitree_ros_to_real.git",
+      "requested_ref": "pinned submodule",
+      "commit": "b989870124913091fbe75e0dcfb047eb4ca00a09",
+      "role": "上游锁定的 ROS 1 通信参考子模块，不用于本次仿真或真机连接"
+    },
+    {
+      "path": "references/legged_gym",
+      "url": "https://github.com/leggedrobotics/legged_gym.git",
+      "requested_ref": "master",
+      "commit": "8fa29acc6fd1910c3d9659eef6310bdd301cde0a",
+      "role": "原始四足RL环境源码阅读；该提交未注册AlienGo，不安装运行时",
+      "sparse_paths": [
+        "legged_gym",
+        "licenses"
+      ],
+      "license": "BSD-3-Clause",
+      "license_file": "references/legged_gym/LICENSE",
+      "download_method": "git shallow clone --depth 1; detached HEAD; --filter=blob:none --sparse",
+      "python_package_installed": false,
+      "asset_license_directory": "references/legged_gym/licenses/assets",
+      "downloaded_at": "2026-11-11"
+    },
+    {
+      "path": "references/legubiao_legged_gym",
+      "url": "https://github.com/legubiao/legged_gym.git",
+      "requested_ref": "master",
+      "commit": "e91e7b346cfcf6b3da12b02a58c0bdf0e6f482c5",
+      "role": "社区控制器作者的AlienGo训练参考，注册aliengo与aliengo_flat；旧栈未实跑",
+      "sparse_paths": [
+        "legged_gym",
+        "resources/unitree/aliengo",
+        "licenses"
+      ],
+      "license": "BSD-3-Clause",
+      "license_file": "references/legubiao_legged_gym/LICENSE",
+      "download_method": "git shallow clone --depth 1; detached HEAD; --filter=blob:none --sparse",
+      "python_package_installed": false,
+      "asset_license_directory": "references/legubiao_legged_gym/licenses/assets",
+      "asset_license_note": "根LICENSE要求查资产许可，但固定提交没有单独AlienGo资产许可证文件；未推定资产全部为BSD。",
+      "downloaded_at": "2026-11-11"
+    },
+    {
+      "path": "references/rsl_rl_v1.0.2",
+      "url": "https://github.com/leggedrobotics/rsl_rl.git",
+      "requested_ref": "v1.0.2",
+      "commit": "2ad79cf0caa85b91721abfe358105f869a784121",
+      "role": "与固定旧legged_gym相配的PPO参考；不与当前rsl-rl-lib混用",
+      "license": "BSD-3-Clause",
+      "license_file": "references/rsl_rl_v1.0.2/LICENSE",
+      "download_method": "git shallow clone --depth 1; detached HEAD",
+      "python_package_installed": false,
+      "downloaded_at": "2026-11-11"
+    },
+    {
+      "path": ".mid360/sdk",
+      "url": "https://github.com/Livox-SDK/Livox-SDK2.git",
+      "requested_ref": "pinned commit",
+      "commit": "c0796f04c143143899c87a773d9f6b7136453c0b",
+      "role": "MID-360 真机驱动 SDK，由 scripts/mid360_build.sh 构建于独立工作区"
+    },
+    {
+      "path": ".mid360/src/livox_ros_driver2",
+      "url": "https://github.com/Livox-SDK/livox_ros_driver2.git",
+      "requested_ref": "pinned commit",
+      "commit": "21445540f0d100dc86a7e6df312dd70bbdb4afdf",
+      "role": "MID-360 ROS 1 真机驱动，由 scripts/mid360_build.sh 构建于独立工作区"
+    },
+    {
+      "path": "references/livox_laser_simulation",
+      "url": "https://github.com/Livox-SDK/livox_laser_simulation.git",
+      "requested_ref": "pinned commit",
+      "commit": "1cce1073633a062b92e30243a4c2920e45551bb5",
+      "role": "Livox 官方 Gazebo 插件与 MID-360 扫描表，ROS Noetic/Gazebo 11 的适配见 ros1/patches/livox_sim_noetic.patch",
+      "license": "MIT",
+      "note": "仅保留编译所需源码及 MID-360 扫描表"
+    },
+    {
+      "path": "references/citysim",
+      "url": "https://github.com/osrf/citysim.git",
+      "requested_ref": "pinned commit",
+      "commit": "3928b08e2598f5ead2e9b24640fe1bde262a136d",
+      "role": "CitySim 大型静态城市点云场景资源",
+      "license": {
+        "spdx": "Apache-2.0",
+        "path": "LICENSE",
+        "additional_notices": [
+          "models/ocean/materials/textures/License and source soil_sand_0045_01.txt"
+        ]
+      },
+      "sparse_paths": [
+        "models/city_terrain",
+        "models/ocean",
+        "media",
+        "worlds"
+      ]
+    },
+    {
+      "path": "references/gazebo_city_models",
+      "url": "https://github.com/osrf/gazebo_models.git",
+      "requested_ref": "pinned commit",
+      "commit": "8163eb4b5e7e21985c6591d1c0bfb56468c0093f",
+      "role": "CitySim 大型静态城市点云场景资源",
+      "license": {
+        "spdx": "CC-BY-3.0",
+        "path": "LICENSE",
+        "attribution": "Retain each model.config with its original author information."
+      },
+      "sparse_paths": [
+        "ambulance",
+        "apartment",
+        "asphalt_plane",
+        "bus",
+        "cafe_table",
+        "cardboard_box",
+        "cinder_block",
+        "cinder_block_2",
+        "collapsed_industrial",
+        "construction_barrel",
+        "construction_cone",
+        "drc_practice_angled_barrier_45",
+        "drc_practice_blue_cylinder",
+        "drc_practice_orange_jersey_barrier",
+        "drc_practice_white_jersey_barrier",
+        "dumpster",
+        "fast_food",
+        "fire_hydrant",
+        "fire_station",
+        "fire_truck",
+        "fountain",
+        "gas_station",
+        "gazebo",
+        "grocery_store",
+        "hatchback",
+        "hatchback_blue",
+        "hatchback_red",
+        "house_1",
+        "house_2",
+        "house_3",
+        "lamp_post",
+        "law_office",
+        "oak_tree",
+        "osrf_first_office",
+        "parking_garage",
+        "pickup",
+        "pier",
+        "pine_tree",
+        "playground",
+        "police_station",
+        "post_office",
+        "postbox",
+        "powerplant",
+        "radio_tower",
+        "reactor",
+        "robocup_3Dsim_field",
+        "salon",
+        "school",
+        "stop_light",
+        "stop_light_post",
+        "stop_sign",
+        "suv",
+        "telephone_pole",
+        "thrift_shop",
+        "tower_crane",
+        "truss_bridge"
+      ]
+    },
+    {
+      "path": "references/fuel_models/Depot",
+      "url": "https://app.gazebosim.org/OpenRobotics/fuel/models/Depot",
+      "requested_ref": "Fuel version 6",
+      "archive_url": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot/6/Depot.zip",
+      "sha256": "760ac4a94293a39aaf878243e927608bebdea006ea97e55d95264007548f07de",
+      "role": "用户指定 livox_gz_sim 顶图使用的 Depot 仓库；Classic适配见 scripts/prepare_depot_world.py",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "authors": [
+          "Rafi Abdullah",
+          "Louise Poubel"
+        ],
+        "attribution_file": "references/fuel_models/Depot/model.config"
+      }
+    },
+    {
+      "path": "references/Super-LIO",
+      "url": "https://github.com/Liansheng-Wang/Super-LIO.git",
+      "requested_ref": "ros1",
+      "commit": "60b57aaac8dc397f80c56364e7ccb008c300cc29",
+      "license": "GPL-3.0",
+      "role": "Super-LIO官方ROS1源码参考；独立.super_lio副本应用仿真快照和接口兼容补丁",
+      "patches": [
+        "ros1/patches/super_lio_snapshot.patch",
+        "ros1/patches/super_lio_cancel_empty_map.patch"
+      ]
+    }
+  ]
+}

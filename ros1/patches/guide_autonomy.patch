@@ -1,0 +1,504 @@
+--- unitree_guide/CMakeLists.txt
++++ unitree_guide/CMakeLists.txt
+@@ -9,6 +9,12 @@
+ set(REAL_ROBOT OFF)          # Link real robot or not, ON or OFF
+ set(DEBUG OFF)              # Use debug functions or not, ON or OFF
+ set(MOVE_BASE OFF)               # Need move_base or not, ON or OFF 
++
++# Autonomy is enabled only in the simulation copy; SDK behavior is unchanged.
++option(GUIDE_ODOMETRY "Publish Guide odometry/TF (keep OFF with Super-LIO)" OFF)
++if(SIMULATION)
++    set(MOVE_BASE ON)
++endif()
+ 
+ if(NOT DEFINED ROBOT_TYPE)
+     message(FATAL_ERROR "[CMake ERROR] Have not defined ROBOT_TYPE")
+@@ -44,6 +50,10 @@
+     endif()
+ endif()
+ 
++if(GUIDE_ODOMETRY OR (REAL_ROBOT AND MOVE_BASE))
++    add_definitions(-DCOMPILE_GUIDE_ODOMETRY)
++endif()
++
+ if(DEBUG)
+     add_definitions(-DCOMPILE_DEBUG)
+     find_package(Python2 COMPONENTS Interpreter Development NumPy)
+@@ -65,6 +75,7 @@
+         robot_state_publisher
+         roscpp
+         std_msgs
++        std_srvs
+         tf
+         geometry_msgs
+         unitree_legged_msgs
+--- unitree_guide/include/FSM/State_FixedStand.h
++++ unitree_guide/include/FSM/State_FixedStand.h
+@@ -14,6 +14,7 @@
+     void run();
+     void exit();
+     FSMStateName checkChange();
++    bool ready() const { return _percent >= 1.f; }
+ 
+ private:
+     float _targetPos[12] = {0.0, 0.67, -1.3, 0.0, 0.67, -1.3, 
+--- unitree_guide/include/FSM/State_move_base.h
++++ unitree_guide/include/FSM/State_move_base.h
+@@ -9,20 +9,28 @@
+ #include "FSM/State_Trotting.h"
+ #include "ros/ros.h"
+ #include <geometry_msgs/Twist.h>
++#ifdef COMPILE_WITH_SIMULATION
++#include "autonomy/GuideAutonomy.h"
++#endif
+ 
+ class State_move_base : public State_Trotting{
+ public:
+     State_move_base(CtrlComponents *ctrlComp);
+     ~State_move_base(){}
+     FSMStateName checkChange();
++#ifdef COMPILE_WITH_SIMULATION
++    guide_autonomy::GuideAutonomy autonomy;
++#endif
+ private:
+     void getUserCmd();
++#ifndef COMPILE_WITH_SIMULATION
+     void initRecv();
+     void twistCallback(const geometry_msgs::Twist& msg);
+     ros::NodeHandle _nm;
+     ros::Subscriber _cmdSub;
+     double _vx, _vy;
+     double _wz;
++#endif
+ };
+ 
+ #endif  // STATE_MOVE_BASE_H
+--- /dev/null
++++ unitree_guide/include/autonomy/CommandGate.h
+@@ -0,0 +1,87 @@
++#ifndef GUIDE_AUTONOMY_COMMAND_GATE_H
++#define GUIDE_AUTONOMY_COMMAND_GATE_H
++#include <algorithm>
++#include <cmath>
++#include <string>
++namespace guide_autonomy {
++enum class Mode { Passive, Stand, Manual, Autonomy };
++enum class Request { None, Stand, Autonomy };
++struct Velocity { double vx = 0., vy = 0., wz = 0.; };
++// ROS independent safety state. Its owner serializes all access with one mutex.
++class CommandGate {
++public:
++    CommandGate(double timeout=.4, double maxVx=.12, double maxVy=.08, double maxWz=.30)
++      : timeout_(positive(timeout,.4)), maxVx_(positive(maxVx,.12)),
++        maxVy_(positive(maxVy,.08)), maxWz_(positive(maxWz,.30)) {}
++    Velocity sample(double wall, double now) {
++        if (!std::isfinite(wall) || !std::isfinite(now) || wall < receivedWall_ ||
++            wall-receivedWall_ > timeout_ || now < lastStamp_ || now-lastStamp_ > timeout_)
++            clear("expired_or_clock_jump");
++        return valid_ && mode_ == Mode::Autonomy && !stopped_ ? velocity_ : Velocity();
++    }
++    bool valid() const { return valid_; }
++    const std::string& reason() const { return reason_; }
++    bool receive(double vx,double vy,double wz,double stamp,double now,double wall,const std::string& frame) {
++        if (stopped_ || mode_ != Mode::Autonomy || pending_ != Request::None) return false;
++        if (!std::isfinite(vx) || !std::isfinite(vy) || !std::isfinite(wz) ||
++            !std::isfinite(stamp) || !std::isfinite(now) || !std::isfinite(wall) ||
++            frame != "base" || stamp <= 0. || stamp <= lastStamp_ || stamp <= transitionStamp_ ||
++            now < stamp || now-stamp > timeout_) {
++            clear("rejected_command");
++            return false;
++        }
++        velocity_.vx = bounded(vx,maxVx_);
++        velocity_.vy = bounded(vy,maxVy_);
++        velocity_.wz = bounded(wz,maxWz_);
++        lastStamp_ = stamp;
++        receivedWall_ = wall;
++        valid_ = true;
++        reason_ = "fresh";
++        return true;
++    }
++    void setMode(Mode mode, double now) {
++        mode_ = mode;
++        transitionStamp_ = now;
++        lastStamp_ = now;
++        pending_ = Request::None;
++        clear("mode_transition");
++    }
++    void stop() { stopped_ = true; pending_ = Request::None; clear("stopped"); }
++    void request(Request request) { if (!stopped_) { pending_ = request; clear("mode_request"); } }
++    void cancelAutonomy() {
++        if (!stopped_) {
++            // A delayed disable cannot override a newer keyboard/manual mode.
++            pending_ = mode_ == Mode::Autonomy ? Request::Stand : Request::None;
++            clear("autonomy_cancelled");
++        }
++    }
++    Request takeRequest(bool standReady) {
++        Request result = pending_;
++        pending_ = Request::None;
++        if (result == Request::Autonomy && (mode_ != Mode::Stand || !standReady)) return Request::None;
++        return result;
++    }
++    Mode mode() const { return mode_; }
++    static const char* name(Mode mode) {
++        switch(mode) {
++        case Mode::Passive: return "passive";
++        case Mode::Stand: return "stand";
++        case Mode::Manual: return "manual";
++        case Mode::Autonomy: return "autonomy";
++        }
++        return "passive";
++    }
++private:
++    static double positive(double value, double fallback) { return std::isfinite(value) && value>0. ? value : fallback; }
++    static double bounded(double value,double limit) { return std::max(-limit,std::min(limit,value)); }
++    void clear(const char* reason) { velocity_=Velocity(); valid_=false; reason_=reason; }
++    Mode mode_ = Mode::Passive;
++    Request pending_ = Request::None;
++    bool valid_ = false, stopped_ = false;
++    double lastStamp_ = 0., transitionStamp_ = 0., receivedWall_ = 0.;
++    double timeout_,maxVx_,maxVy_,maxWz_;
++    Velocity velocity_;
++    std::string reason_ = "no_command";
++};
++}
++#endif
+--- /dev/null
++++ unitree_guide/include/autonomy/GuideAutonomy.h
+@@ -0,0 +1,40 @@
++#ifndef GUIDE_AUTONOMY_ROS_H
++#define GUIDE_AUTONOMY_ROS_H
++#if defined(COMPILE_WITH_SIMULATION) && defined(COMPILE_WITH_MOVE_BASE)
++#include "autonomy/CommandGate.h"
++#include <mutex>
++#include <ros/ros.h>
++#include <ros/callback_queue.h>
++#include <geometry_msgs/TwistStamped.h>
++#include <std_msgs/String.h>
++#include <std_srvs/Trigger.h>
++#include <std_srvs/SetBool.h>
++namespace guide_autonomy {
++class GuideAutonomy {
++public:
++    GuideAutonomy();
++    ~GuideAutonomy();
++    Velocity sample();
++    Request takeRequest(bool standReady);
++    void transition(Mode mode);
++    void feedback(bool standReady);
++private:
++    void command(const geometry_msgs::TwistStamped::ConstPtr& msg);
++    bool stand(std_srvs::Trigger::Request&, std_srvs::Trigger::Response& response);
++    bool autonomy(std_srvs::SetBool::Request& request, std_srvs::SetBool::Response& response);
++    void status(const ros::WallTimerEvent&);
++    ros::CallbackQueue queue_;
++    ros::NodeHandle node_;
++    ros::AsyncSpinner spinner_;
++    ros::Subscriber subscriber_;
++    ros::ServiceServer standService_, autonomyService_;
++    ros::Publisher publisher_;
++    ros::WallTimer timer_;
++    std::mutex mutex_;
++    CommandGate gate_;
++    bool standReady_ = false;
++    double latestStamp_ = 0.;
++};
++}
++#endif
++#endif
+--- unitree_guide/include/control/Estimator.h
++++ unitree_guide/include/control/Estimator.h
+@@ -15,7 +15,7 @@
+     #include "common/PyPlot.h"
+ #endif  // COMPILE_DEBUG
+ 
+-#ifdef COMPILE_WITH_MOVE_BASE
++#ifdef COMPILE_GUIDE_ODOMETRY
+     #include <ros/ros.h>
+     #include <ros/time.h>
+     #include <geometry_msgs/TransformStamped.h>
+@@ -23,7 +23,7 @@
+     #include <nav_msgs/Odometry.h>
+     #include <geometry_msgs/Twist.h>
+     #include <boost/array.hpp>
+-#endif  // COMPILE_WITH_MOVE_BASE
++#endif  // COMPILE_GUIDE_ODOMETRY
+ 
+ class Estimator{
+ public:
+@@ -96,7 +96,7 @@
+ #ifdef COMPILE_DEBUG
+     PyPlot *_testPlot;
+ #endif  // COMPILE_DEBUG
+-#ifdef COMPILE_WITH_MOVE_BASE
++#ifdef COMPILE_GUIDE_ODOMETRY
+     ros::NodeHandle _nh;
+     ros::Publisher _pub;
+     tf::TransformBroadcaster _odomBroadcaster;
+@@ -119,7 +119,7 @@
+                                         0, 0, 0, 1e6, 0, 0, 
+                                         0, 0, 0, 0, 1e6, 0, 
+                                         0, 0, 0, 0, 0, 1e-9};
+-#endif  // COMPILE_WITH_MOVE_BASE
++#endif  // COMPILE_GUIDE_ODOMETRY
+ 
+ };
+ 
+--- unitree_guide/include/interface/CmdPanel.h
++++ unitree_guide/include/interface/CmdPanel.h
+@@ -7,6 +7,9 @@
+ #include "message/unitree_joystick.h"
+ #include "common/enumClass.h"
+ #include <pthread.h>
++#ifdef COMPILE_WITH_SIMULATION
++#include <atomic>
++#endif
+ 
+ #ifdef COMPILE_WITH_REAL_ROBOT
+     #ifdef ROBOT_TYPE_A1
+@@ -39,7 +42,13 @@
+ public:
+     CmdPanel(){}
+     virtual ~CmdPanel(){}
+-    UserCommand getUserCmd(){return userCmd;}
++    UserCommand getUserCmd(){
++#ifdef COMPILE_WITH_SIMULATION
++        return userCmd.exchange(UserCommand::NONE);
++#else
++        return userCmd;
++#endif
++    }
+     UserValue getUserValue(){return userValue;}
+     void setPassive(){userCmd = UserCommand::L2_B;}
+     void setZero(){userValue.setZero();}
+@@ -48,7 +57,12 @@
+ #endif  // COMPILE_WITH_REAL_ROBOT
+ protected:
+     virtual void* run(void *arg){return NULL;}
++#ifdef COMPILE_WITH_SIMULATION
++    // Discrete keys are consumed once, so old 1/2 requests cannot override ROS modes.
++    std::atomic<UserCommand> userCmd;
++#else
+     UserCommand userCmd;
++#endif
+     UserValue userValue;
+ };
+ 
+--- unitree_guide/package.xml
++++ unitree_guide/package.xml
+@@ -31,4 +31,5 @@
+         <!-- Other tools can request additional information be placed here -->
+         <gazebo_ros plugin_path="${prefix}/lib" gazebo_media_path="${prefix}"/>
+     </export>
++  <depend>std_srvs</depend>
+ </package>
+--- unitree_guide/src/FSM/FSM.cpp
++++ unitree_guide/src/FSM/FSM.cpp
+@@ -53,6 +53,36 @@
+         _ctrlComp->ioInter->setPassive();
+     }
+ 
++#if defined(COMPILE_WITH_SIMULATION) && defined(COMPILE_WITH_MOVE_BASE)
++    // Only this control thread changes state/gait; ROS callbacks queue requests.
++    using guide_autonomy::Mode;
++    using guide_autonomy::Request;
++    const bool standReady = _currentState == _stateList.fixedStand && _stateList.fixedStand->ready();
++    const Request request = _stateList.moveBase->autonomy.takeRequest(standReady);
++    FSMStateName desired = _currentState->checkChange();
++    if (request == Request::Stand) desired = FSMStateName::FIXEDSTAND;
++    if (request == Request::Autonomy) desired = FSMStateName::MOVE_BASE;
++    // Physical keyboard overrides always win over a simultaneous ROS request.
++    if (_ctrlComp->lowState->userCmd == UserCommand::L2_B || !checkSafty())
++        desired = FSMStateName::PASSIVE;
++    else if (_ctrlComp->lowState->userCmd == UserCommand::L2_A)
++        desired = FSMStateName::FIXEDSTAND;
++    if (desired == FSMStateName::MOVE_BASE && _currentState != _stateList.moveBase && !standReady)
++        desired = _currentState->_stateName;
++    if (desired != _currentState->_stateName) {
++        // Clear before exit/enter and reject every pre-transition source stamp.
++        Mode mode = desired == FSMStateName::PASSIVE ? Mode::Passive :
++                    desired == FSMStateName::FIXEDSTAND ? Mode::Stand :
++                    desired == FSMStateName::MOVE_BASE ? Mode::Autonomy : Mode::Manual;
++        _stateList.moveBase->autonomy.transition(mode);
++        _currentState->exit();
++        _currentState = getNextState(desired);
++        _currentState->enter();
++        std::cout << "Controller mode: " << guide_autonomy::CommandGate::name(mode) << std::endl;
++    }
++    _currentState->run();
++    _stateList.moveBase->autonomy.feedback(_currentState == _stateList.fixedStand && _stateList.fixedStand->ready());
++#else
+     if(_mode == FSMMode::NORMAL){
+         // 先让当前状态写出 lowCmd，再检查用户命令是否请求切换，因此命令在下一轮才发送。
+         _currentState->run();
+@@ -74,6 +104,8 @@
+         _mode = FSMMode::NORMAL;
+         _currentState->run();
+     }
++
++#endif
+ 
+     // dt 的秒乘 10^6 转为微秒，(long long) 显式转换为整数时间长度。
+     // 等到距本轮起点达到 dt；仿真等待物理时钟推进，避免负载变化时步态提前。
+--- unitree_guide/src/FSM/State_move_base.cpp
++++ unitree_guide/src/FSM/State_move_base.cpp
+@@ -9,7 +9,9 @@
+     :State_Trotting(ctrlComp){
+     _stateName = FSMStateName::MOVE_BASE;
+     _stateNameString = "move_base";
++#ifndef COMPILE_WITH_SIMULATION
+     initRecv();
++#endif
+ }
+ 
+ FSMStateName State_move_base::checkChange(){
+@@ -25,10 +27,16 @@
+ }
+ 
+ void State_move_base::getUserCmd(){
++#ifdef COMPILE_WITH_SIMULATION
++    const guide_autonomy::Velocity velocity = autonomy.sample();
++    setHighCmd(velocity.vx, velocity.vy, velocity.wz);
++#else
+     setHighCmd(_vx, _vy, _wz);
+     ros::spinOnce();
++#endif
+ }
+ 
++#ifndef COMPILE_WITH_SIMULATION
+ void State_move_base::twistCallback(const geometry_msgs::Twist& msg){
+     _vx = msg.linear.x;
+     _vy = msg.linear.y;
+@@ -39,4 +47,6 @@
+     _cmdSub = _nm.subscribe("/cmd_vel", 1, &State_move_base::twistCallback, this);
+ }
+ 
++#endif  // legacy non-simulation ROS receiver
++
+ #endif  // COMPILE_WITH_MOVE_BASE
+\ No newline at end of file
+--- /dev/null
++++ unitree_guide/src/autonomy/GuideAutonomy.cpp
+@@ -0,0 +1,88 @@
++#if defined(COMPILE_WITH_SIMULATION) && defined(COMPILE_WITH_MOVE_BASE)
++#include "autonomy/GuideAutonomy.h"
++#include <sstream>
++#include <iomanip>
++namespace guide_autonomy {
++GuideAutonomy::GuideAutonomy() : node_("/aliengo/controller"), spinner_(1, &queue_) {
++    node_.setCallbackQueue(&queue_);
++    double timeout=.4, vx=.12, vy=.08, wz=.30;
++    node_.param("command_timeout", timeout, timeout);
++    node_.param("max_vx", vx, vx);
++    node_.param("max_vy", vy, vy);
++    node_.param("max_wz", wz, wz);
++    gate_ = CommandGate(timeout,vx,vy,wz);
++    subscriber_ = node_.subscribe("/exploration/cmd_vel", 1, &GuideAutonomy::command, this);
++    standService_ = node_.advertiseService("stand", &GuideAutonomy::stand, this);
++    autonomyService_ = node_.advertiseService("autonomy", &GuideAutonomy::autonomy, this);
++    publisher_ = node_.advertise<std_msgs::String>("status", 1, true);
++    timer_ = node_.createWallTimer(ros::WallDuration(.05), &GuideAutonomy::status, this);
++    spinner_.start();
++}
++GuideAutonomy::~GuideAutonomy() {
++    spinner_.stop();
++    std::lock_guard<std::mutex> lock(mutex_);
++    gate_.stop();
++}
++Velocity GuideAutonomy::sample() {
++    std::lock_guard<std::mutex> lock(mutex_);
++    return gate_.sample(ros::WallTime::now().toSec(),ros::Time::now().toSec());
++}
++Request GuideAutonomy::takeRequest(bool standReady) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    return gate_.takeRequest(standReady);
++}
++void GuideAutonomy::transition(Mode mode) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    gate_.setMode(mode,ros::Time::now().toSec());
++    standReady_ = false;
++}
++void GuideAutonomy::feedback(bool standReady) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    standReady_ = standReady;
++}
++void GuideAutonomy::command(const geometry_msgs::TwistStamped::ConstPtr& msg) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    // Check all six components, even the three axes this gait does not command.
++    double vx=msg->twist.linear.x;
++    if (!std::isfinite(msg->twist.linear.z) || !std::isfinite(msg->twist.angular.x) ||
++        !std::isfinite(msg->twist.angular.y)) vx = NAN;
++    if (gate_.receive(vx,msg->twist.linear.y,msg->twist.angular.z,
++            msg->header.stamp.toSec(),ros::Time::now().toSec(),ros::WallTime::now().toSec(),msg->header.frame_id))
++        latestStamp_ = msg->header.stamp.toSec();
++}
++bool GuideAutonomy::stand(std_srvs::Trigger::Request&, std_srvs::Trigger::Response& response) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    gate_.request(Request::Stand);
++    standReady_ = false;
++    response.success = true;
++    response.message = "stand request queued; await status.stand_ready";
++    return true;
++}
++bool GuideAutonomy::autonomy(std_srvs::SetBool::Request& request, std_srvs::SetBool::Response& response) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    response.success = !request.data || (gate_.mode()==Mode::Stand && standReady_);
++    if (response.success) {
++        if (request.data) gate_.request(Request::Autonomy);
++        else gate_.cancelAutonomy();
++        standReady_ = false;
++    }
++    response.message = response.success ?
++        (request.data ? "mode request queued; await status.mode" : "autonomy cancelled; await status.mode") :
++        "completed stand required";
++    return true;
++}
++void GuideAutonomy::status(const ros::WallTimerEvent&) {
++    std::lock_guard<std::mutex> lock(mutex_);
++    Velocity velocity=gate_.sample(ros::WallTime::now().toSec(),ros::Time::now().toSec());
++    std::ostringstream json;
++    json << std::setprecision(16) << "{\"mode\":\"" << CommandGate::name(gate_.mode())
++         << "\",\"stand_ready\":" << (standReady_ ? "true" : "false")
++         << ",\"command_valid\":" << (gate_.valid() ? "true" : "false")
++         << ",\"command_reason\":\"" << gate_.reason() << "\",\"command_stamp\":" << latestStamp_
++         << ",\"vx\":" << velocity.vx << ",\"vy\":" << velocity.vy << ",\"wz\":" << velocity.wz << "}";
++    std_msgs::String message;
++    message.data=json.str();
++    publisher_.publish(message);
++}
++}
++#endif
+--- unitree_guide/src/control/Estimator.cpp
++++ unitree_guide/src/control/Estimator.cpp
+@@ -146,10 +146,10 @@
+ 
+ 
+     /* ROS odometry publisher */
+-    // 条件编译：只有启用 COMPILE_WITH_MOVE_BASE 时，才把ROS里程计发布代码编入程序。
+-    #ifdef COMPILE_WITH_MOVE_BASE
++    // 条件编译：只有启用 COMPILE_GUIDE_ODOMETRY 时，才把ROS里程计发布代码编入程序。
++    #ifdef COMPILE_GUIDE_ODOMETRY
+         _pub = _nh.advertise<nav_msgs::Odometry>("odom", 1);
+-    #endif  // COMPILE_WITH_MOVE_BASE
++    #endif  // COMPILE_GUIDE_ODOMETRY
+ }
+ 
+ // 每个控制周期执行一次“运动学观测→接触置信度调整→IMU预测→卡尔曼校正”，更新基座平移状态。
+@@ -221,7 +221,7 @@
+     _vyFilter->addValue(_xhat(4));
+     _vzFilter->addValue(_xhat(5));
+ 
+-    #ifdef COMPILE_WITH_MOVE_BASE
++    #ifdef COMPILE_GUIDE_ODOMETRY
+         // 将控制周期计数换算成较低的里程计发布频率；%为整数取余，满足整除条件时发布一次。
+         if(_count % ((int)( 1.0/(_dt*_pubFreq))) == 0){
+             _currentTime = ros::Time::now();
+@@ -273,7 +273,7 @@
+             _count = 1;
+         }
+         ++_count;
+-    #endif  // COMPILE_WITH_MOVE_BASE
++    #endif  // COMPILE_GUIDE_ODOMETRY
+ }
+ 
+ // 返回世界系基座位置p（3×1，米）；segment(0,3)取状态向量的前3项。

@@ -1,0 +1,219 @@
+{
+  "result": "PASS",
+  "seconds": 20,
+  "gui": false,
+  "rviz": false,
+  "record_bag": false,
+  "phases": {},
+  "checks": {
+    "odometry_received": true,
+    "colored_cloud_nonempty": true,
+    "path_received": true,
+    "visual_features": true,
+    "tracked_images": true,
+    "sensor_inputs": true,
+    "stamped_tf": true,
+    "measurement_timestamps": true,
+    "fusion_reaches_input_end": true,
+    "all_sensors_reach_end": true,
+    "map_saved": true
+  },
+  "failures": [],
+  "posture_limits": {
+    "min_z_m": 0.18,
+    "max_abs_roll_rad": 0.8,
+    "max_abs_pitch_rad": 0.8
+  },
+  "accuracy_limits": {
+    "forward_error_m": 0.2,
+    "position_rmse_m": 0.15,
+    "yaw_change_error_rad": 0.2,
+    "estimated_stop_drift_m": 0.1,
+    "truth_stop_drift_m": 0.05
+  },
+  "algorithm": "FAST-LIVO2",
+  "replay": true,
+  "wall_timeout_seconds": 600,
+  "bag_topics": {
+    "/camera/color/camera_info": 628,
+    "/camera/color/image_raw": 628,
+    "/clock": 209121,
+    "/livox/imu": 8357,
+    "/livox/lidar": 418,
+    "/tf_static": 1
+  },
+  "master_command": [
+    "roscore"
+  ],
+  "lio_command": [
+    "roslaunch",
+    "--sigint-timeout=15",
+    "--sigterm-timeout=2",
+    "/course/ros1/fast_livo/mapping.launch",
+    "rviz:=false",
+    "map_dir:=/result/maps"
+  ],
+  "playback_command": [
+    "rosbag",
+    "play",
+    "--clock",
+    "--rate=0.5",
+    "--delay=2",
+    "/input/sensors.bag",
+    "--topics",
+    "/camera/color/camera_info",
+    "/camera/color/image_raw",
+    "/livox/imu",
+    "/livox/lidar",
+    "/tf_static"
+  ],
+  "base_to_imu": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.261
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.02329
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.058879999999999995
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "input_graph": {
+    "publishers": [
+      "/fast_livo/laserMapping"
+    ],
+    "estimator_inputs": {
+      "/fast_livo/laserMapping": [
+        "/camera/color/image_raw",
+        "/clock",
+        "/livox/imu",
+        "/livox/lidar"
+      ]
+    },
+    "sensor_only": true
+  },
+  "calibration": {
+    "image_topic": "/camera/color/image_raw",
+    "camera_info_topic": "/camera/color/camera_info",
+    "image_stamp": 9.6692,
+    "image_frame": "d435_color_optical_frame",
+    "lidar_frame": "mid360_link",
+    "imu_frame": "mid360_imu_link",
+    "camera": {
+      "cam_model": "Pinhole",
+      "cam_width": 640,
+      "cam_height": 360,
+      "scale": 1.0,
+      "cam_fx": 465.601475318367,
+      "cam_fy": 465.601475318367,
+      "cam_cx": 320.0,
+      "cam_cy": 180.0,
+      "cam_d0": 0.0,
+      "cam_d1": 0.0,
+      "cam_d2": 0.0,
+      "cam_d3": 0.0
+    },
+    "extrinsics": {
+      "extrinsic_T": [
+        -0.011,
+        -0.02329,
+        0.04412
+      ],
+      "extrinsic_R": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "Pcl": [
+        0.014999999999999986,
+        -0.13299999999999998,
+        -0.07
+      ],
+      "Rcl": [
+        0.0,
+        -1.0,
+        0.0,
+        1.1102230246251565e-16,
+        -2.220446049250313e-16,
+        -1.0,
+        1.0000000000000002,
+        1.1102230246251565e-16,
+        0.0
+      ]
+    }
+  },
+  "playback_returncode": 0,
+  "phase_at_stop": "replay",
+  "shutdown": {
+    "lio": {
+      "graceful": true,
+      "exited_before_signal": false,
+      "returncode": 0,
+      "wall_seconds": 0.9672689119997813
+    },
+    "master": {
+      "graceful": true,
+      "exited_before_signal": false,
+      "returncode": 0,
+      "wall_seconds": 0.6162317969992728
+    }
+  },
+  "visual": {
+    "frames": 409,
+    "frames_with_features": 409,
+    "max_features": 212
+  },
+  "pcd_files": [
+    {
+      "path": "/result/maps/all_downsampled_points.pcd",
+      "bytes": 208230,
+      "points": 13003,
+      "payload_bytes": 208048,
+      "valid": true
+    },
+    {
+      "path": "/result/maps/all_raw_points.pcd",
+      "bytes": 3626968,
+      "points": 226674,
+      "payload_bytes": 3626784,
+      "valid": true
+    }
+  ],
+  "odometry_image_stamp_matches": 410,
+  "final_fusion_lag_seconds": 0.06459999999999866,
+  "final_sensor_lag_seconds": 0.07367175699999962,
+  "odom_count": 410,
+  "cloud_count": 410,
+  "image_count": 628,
+  "tracked_image_count": 410,
+  "tf": {
+    "attempts": 1659,
+    "successful_stamps": 410,
+    "matrix_max_error": 1.6653345369377348e-16,
+    "last_error": null,
+    "odom_stamp_ns": 51341800000,
+    "transform_stamp_ns": 51341800000
+  },
+  "wall_seconds": 92.19768363200001
+}

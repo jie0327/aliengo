@@ -1,0 +1,15 @@
+<launch>
+  <arg name="sensor_config" default=""/>
+  <node pkg="gbplanner" type="gbplanner_node" name="gbplanner" output="screen">
+    <rosparam command="load" file="$(find gbplanner)/config/ugv/gzc/niosh_exploration/gbplanner_config.yaml" />
+    <rosparam command="load" file="$(find aliengo_exploration)/config/gbplanner.yaml" />
+    <rosparam command="load" file="$(find aliengo_exploration)/config/voxblox.yaml" />
+    <rosparam if="$(eval arg('sensor_config') != '')" command="load" file="$(arg sensor_config)" />
+    <param name="behavior_tree_path" value="$(find gbplanner)/config/bt_xml/aliengo_single_plan.xml" />
+    <remap from="odometry" to="/exploration/base_odom" />
+    <remap from="pointcloud" to="/exploration/cloud" />
+    <remap from="elevation_map" to="/exploration/elevation_map" />
+    <remap from="gbplanner_ros" to="/exploration/plan_raw" />
+    <remap from="/gbplanner_path" to="/exploration/planner_debug_path" />
+  </node>
+</launch>

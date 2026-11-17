@@ -1,0 +1,138 @@
+diff -ruN a/voxblox_ros/include/voxblox_ros/native_cloud_queue.h b/voxblox_ros/include/voxblox_ros/native_cloud_queue.h
+--- a/voxblox_ros/include/voxblox_ros/native_cloud_queue.h	1970-01-01 08:00:00.000000000 +0800
++++ b/voxblox_ros/include/voxblox_ros/native_cloud_queue.h	2026-11-14 09:11:18.509883091 +0800
+@@ -0,0 +1,43 @@
++#pragma once
++#include <algorithm>
++#include <cstdint>
++#include <deque>
++#include <map>
++#include <string>
++
++namespace voxblox {
++// Keep origins independent. Search all pending observations so delayed TF for
++// one origin (or timestamp) cannot starve another. Storage and dedup are bounded.
++template <typename Message> class NativeCloudQueue {
++  struct Entry { uint64_t stamp; Message message; };
++  std::map<std::string, std::deque<Entry>> pending_;
++  std::map<std::string, std::deque<uint64_t>> seen_;
++ public:
++  bool push(const std::string& frame, uint64_t stamp, const Message& message,
++            uint64_t minimum_interval = 0) {
++    if (frame.empty() || stamp == 0) return false;
++    auto& seen = seen_[frame];
++    for (auto other : seen) {
++      const auto delta = other > stamp ? other-stamp : stamp-other;
++      if (delta == 0 || delta < minimum_interval) return false;
++    }
++    seen.push_back(stamp);
++    if (seen.size() > 256) seen.pop_front();
++    auto& pending = pending_[frame];
++    pending.push_back({stamp, message});
++    if (pending.size() > 16) pending.pop_front();
++    return true;
++  }
++  template <typename Ready> bool popReady(Ready ready, Message* output) {
++    for (auto& source : pending_) {
++      for (auto it = source.second.begin(); it != source.second.end(); ++it) {
++        if (!ready(source.first, it->stamp, it->message)) continue;
++        *output = it->message;
++        source.second.erase(it);
++        return true;
++      }
++    }
++    return false;
++  }
++};
++}
+diff -ruN a/voxblox_ros/include/voxblox_ros/tsdf_server.h b/voxblox_ros/include/voxblox_ros/tsdf_server.h
+--- a/voxblox_ros/include/voxblox_ros/tsdf_server.h	2022-11-06 15:11:36.000000000 +0800
++++ b/voxblox_ros/include/voxblox_ros/tsdf_server.h	2026-11-14 09:11:18.510883070 +0800
+@@ -1,3 +1,5 @@
++#include <std_msgs/String.h>
++#include <voxblox_ros/native_cloud_queue.h>
+ #ifndef VOXBLOX_ROS_TSDF_SERVER_H_
+ #define VOXBLOX_ROS_TSDF_SERVER_H_
+ 
+@@ -250,7 +252,10 @@
+    * Queue of incoming pointclouds, in case the transforms can't be immediately
+    * resolved.
+    */
+-  std::queue<sensor_msgs::PointCloud2::Ptr> pointcloud_queue_;
++  NativeCloudQueue<sensor_msgs::PointCloud2::Ptr> pointcloud_queue_;
++  ros::Publisher native_status_pub_;
++  ros::Timer native_retry_timer_;
++  std::map<std::string, std::pair<ros::Time, uint64_t>> native_integrated_;
+   std::queue<sensor_msgs::PointCloud2::Ptr> freespace_pointcloud_queue_;
+ 
+   // Last message times for throttling input.
+diff -ruN a/voxblox_ros/src/tsdf_server.cc b/voxblox_ros/src/tsdf_server.cc
+--- a/voxblox_ros/src/tsdf_server.cc	2022-11-06 15:11:36.000000000 +0800
++++ b/voxblox_ros/src/tsdf_server.cc	2026-11-14 09:11:18.510883070 +0800
+@@ -1,3 +1,5 @@
++#include <iomanip>
++#include <sstream>
+ #include <minkindr_conversions/kindr_msg.h>
+ #include <minkindr_conversions/kindr_tf.h>
+ #include "voxblox_ros/conversions.h"
+@@ -41,6 +43,9 @@
+       transformer_(nh, nh_private) {
+   getServerConfigFromRosParam(nh_private);
+ 
++  native_status_pub_ = nh_.advertise<std_msgs::String>("/exploration/map_status", 1, true);
++  native_retry_timer_ = nh_.createTimer(ros::Duration(0.05),
++      [this](const ros::TimerEvent&) { insertPointcloud(sensor_msgs::PointCloud2::Ptr()); });
+   // Advertise topics.
+   surface_pointcloud_pub_ =
+       nh_private_.advertise<pcl::PointCloud<pcl::PointXYZRGB> >(
+@@ -309,6 +314,22 @@
+   ros::WallTime start = ros::WallTime::now();
+   integratePointcloud(T_G_C_refined, points_C, colors, is_freespace_pointcloud);
+   ros::WallTime end = ros::WallTime::now();
++  if (!is_freespace_pointcloud && !points_C.empty()) {
++    auto& source = native_integrated_[pointcloud_msg->header.frame_id];
++    source.first = std::max(source.first, pointcloud_msg->header.stamp);
++    ++source.second;
++    std::ostringstream json;
++    json << std::setprecision(17) << "{\"stamp\":" << ros::Time::now().toSec() << ",\"sources\":{";
++    bool first = true;
++    for (const auto& item : native_integrated_) {
++      if (!first) json << ",";
++      first = false;
++      json << "\"" << item.first << "\":{\"stamp\":" << item.second.first.toSec()
++           << ",\"count\":" << item.second.second << "}";
++    }
++    json << "}}";
++    std_msgs::String status; status.data = json.str(); native_status_pub_.publish(status);
++  }
+   if (verbose_) {
+     ROS_INFO("Finished integrating in %f seconds, have %lu blocks.",
+              (end - start).toSec(),
+@@ -356,18 +377,19 @@
+ 
+ void TsdfServer::insertPointcloud(
+     const sensor_msgs::PointCloud2::Ptr& pointcloud_msg_in) {
+-  if (pointcloud_msg_in->header.stamp - last_msg_time_ptcloud_ >
+-      min_time_between_msgs_) {
+-    last_msg_time_ptcloud_ = pointcloud_msg_in->header.stamp;
+-    // So we have to process the queue anyway... Push this back.
+-    pointcloud_queue_.push(pointcloud_msg_in);
++  if (pointcloud_msg_in && pointcloud_msg_in->header.frame_id != world_frame_) {
++    pointcloud_queue_.push(pointcloud_msg_in->header.frame_id,
++        pointcloud_msg_in->header.stamp.toNSec(), pointcloud_msg_in,
++        static_cast<uint64_t>(std::max(0.0, min_time_between_msgs_.toSec()) * 1e9));
+   }
+-
+   Transformation T_G_C;
+   sensor_msgs::PointCloud2::Ptr pointcloud_msg;
+   bool processed_any = false;
+-  while (
+-      getNextPointcloudFromQueue(&pointcloud_queue_, &pointcloud_msg, &T_G_C)) {
++  while (pointcloud_queue_.popReady(
++      [this, &T_G_C](const std::string& frame, uint64_t stamp,
++                    const sensor_msgs::PointCloud2::Ptr&) {
++        return transformer_.lookupTransform(frame, world_frame_, ros::Time().fromNSec(stamp), &T_G_C);
++      }, &pointcloud_msg)) {
+     constexpr bool is_freespace_pointcloud = false;
+     processPointCloudMessageAndInsert(pointcloud_msg, T_G_C,
+                                       is_freespace_pointcloud);

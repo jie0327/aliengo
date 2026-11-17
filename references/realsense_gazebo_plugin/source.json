@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/pal-robotics/realsense_gazebo_plugin.git",
+  "branch": "melodic-devel",
+  "commit": "49ab134fa517280bb8393e715173dc631ccc2557",
+  "license": "Apache-2.0",
+  "reference_path": "references/realsense_gazebo_plugin",
+  "patch": "ros1/patches/realsense_rgbd.patch",
+  "upstream_files_sha256": {
+    "CMakeLists.txt": "34d4d13a2e6b6d51f841935fa023b7e9e47671e81afb888aa9409ce6dde51935",
+    "package.xml": "2fbb18805cad5bb7cd4e917400daef841f700b1a71245112a6a97a9de8b3677e",
+    "README.md": "82c5d0ee3b43e196eb9d44fc0e9f4c92f99cd8b274fcd1f8a5ce1410e3ee4b01",
+    "CHANGELOG.rst": "f99d093b82f06d7fa9189788091c160e9e27b9db32aa56b77399354a2c3958ba",
+    "src/RealSensePlugin.cpp": "598716f80de94d3e859a106200e7da0be0fd8b5361308b855e2e31c9249f4b5d",
+    "src/gazebo_ros_realsense.cpp": "c446f84f5d86c05a586ed02ba32137c4b80e401a91fe2a6a4d5600364d83dcf6",
+    "include/realsense_gazebo_plugin/RealSensePlugin.h": "9884a6783ce7b8f2dffc2b57dc457a671bdddb691355de91922fcb7467fbafee",
+    "include/realsense_gazebo_plugin/gazebo_ros_realsense.h": "cd33c72792a14c5bfc4b376f1727bc5726e805ed9eb0b766449691ad8bd4a7b6"
+  },
+  "license_text_source": "https://github.com/intel/gazebo-realsense/blob/776c09fe741b428245a437b46c62da01a7957e32/LICENSE",
+  "note": "Original upstream files are unchanged; apply the local patch to a workspace copy. No model, mesh, librealsense SDK, or hardware driver is vendored."
+}

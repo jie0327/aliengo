@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Chip position from the MID-360 manual, in the point-cloud frame. -->
+  <xacro:macro name="mid360_imu">
+    <link name="mid360_imu_link">
+      <inertial>
+        <mass value="0.000001"/>
+        <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
+      </inertial>
+    </link>
+    <joint name="mid360_imu_joint" type="fixed">
+      <parent link="mid360_link"/>
+      <child link="mid360_imu_link"/>
+      <origin xyz="0.011 0.02329 -0.04412" rpy="0 0 0"/>
+    </joint>
+    <gazebo reference="mid360_imu_link">
+      <sensor name="mid360_imu" type="imu">
+        <always_on>true</always_on>
+        <update_rate>200</update_rate>
+        <visualize>false</visualize>
+        <plugin name="mid360_imu_ros" filename="libgazebo_ros_imu_sensor.so">
+          <robotNamespace>/</robotNamespace>
+          <topicName>/mid360_sim/imu_raw</topicName>
+          <frameName>mid360_imu_link</frameName>
+          <xyzOffset>0 0 0</xyzOffset><rpyOffset>0 0 0</rpyOffset>
+          <updateRateHZ>200</updateRateHZ>
+          <gaussianNoise>0</gaussianNoise>
+          <initialOrientationAsReference>false</initialOrientationAsReference>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

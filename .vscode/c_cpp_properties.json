@@ -1,0 +1,59 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "compilerPath": "/usr/bin/g++",
+            "compilerArgs": [
+                "--sysroot=${workspaceFolder}/.ros1/editor/sysroot"
+            ],
+            "compileCommands": "${workspaceFolder}/.ros1/editor/compile_commands.json",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "defines": [
+                "COMPILE_WITH_ROS",
+                "COMPILE_WITH_SIMULATION",
+                "ROBOT_TYPE_Go1",
+                "RUN_ROS"
+            ],
+            "includePath": [
+                "${workspaceFolder}/.ros1/src/unitree_guide/include",
+                "${workspaceFolder}/.ros1/src/unitree_legged_control/include",
+                "${workspaceFolder}/.ros1/src/unitree_controller/include",
+                "${workspaceFolder}/references/unitree_guide/unitree_guide/include",
+                "${workspaceFolder}/references/unitree_ros/unitree_legged_control/include",
+                "${workspaceFolder}/references/unitree_ros/unitree_controller/include",
+                "${workspaceFolder}/.ros1/devel/include",
+                "${workspaceFolder}/.ros1/editor/sysroot/opt/ros/noetic/include",
+                "${workspaceFolder}/.ros1/editor/sysroot/opt/ros/noetic/include/xmlrpcpp",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/eigen3",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/gazebo-11",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/bullet",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/sdformat-9.10",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/OGRE",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/OGRE/Terrain",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/OGRE/Paging",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/simbody",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/ignition/math6",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/ignition/transport8",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/ignition/msgs5",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/ignition/common3",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/ignition/fuel_tools4",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/ignition/cmake2",
+                "${workspaceFolder}/.ros1/editor/sysroot/usr/include/uuid"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/.ros1/src",
+                    "${workspaceFolder}/references/unitree_guide/unitree_guide/include",
+                    "${workspaceFolder}/references/unitree_ros/unitree_legged_control/include",
+                    "${workspaceFolder}/references/unitree_ros/unitree_controller/include",
+                    "${workspaceFolder}/references/unitree_legged_sdk/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.ros1/editor/browse.vc.db"
+            }
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,97 @@
+{
+  "frame": {
+    "stamp": 9.99,
+    "body_omega": [
+      2.0,
+      -4.0,
+      1.0
+    ],
+    "orientation_xyzw": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "command": [
+      0.5,
+      -0.25,
+      2.0
+    ],
+    "joints": [
+      {
+        "name": "FR_hip_joint",
+        "q": 0.0,
+        "dq": 0.0
+      },
+      {
+        "name": "FR_thigh_joint",
+        "q": 0.8,
+        "dq": 0.0
+      },
+      {
+        "name": "FR_calf_joint",
+        "q": -1.5,
+        "dq": 0.0
+      },
+      {
+        "name": "FL_hip_joint",
+        "q": 0.0,
+        "dq": 0.0
+      },
+      {
+        "name": "FL_thigh_joint",
+        "q": 0.8,
+        "dq": 0.0
+      },
+      {
+        "name": "FL_calf_joint",
+        "q": -1.5,
+        "dq": 0.0
+      },
+      {
+        "name": "RR_hip_joint",
+        "q": 0.0,
+        "dq": 0.0
+      },
+      {
+        "name": "RR_thigh_joint",
+        "q": 0.8,
+        "dq": 0.0
+      },
+      {
+        "name": "RR_calf_joint",
+        "q": -1.5,
+        "dq": 0.0
+      },
+      {
+        "name": "RL_hip_joint",
+        "q": 0.0,
+        "dq": 0.0
+      },
+      {
+        "name": "RL_thigh_joint",
+        "q": 0.8,
+        "dq": 0.0
+      },
+      {
+        "name": "RL_calf_joint",
+        "q": -1.5,
+        "dq": 0.0
+      }
+    ]
+  },
+  "action_fixture": [
+    2.0,
+    -2.0,
+    0.5,
+    2.0,
+    -2.0,
+    0.5,
+    2.0,
+    -2.0,
+    0.5,
+    2.0,
+    -2.0,
+    0.5
+  ]
+}

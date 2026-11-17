@@ -1,0 +1,141 @@
+# 世界坐标下的实时点云；动态 world→base 来自 Gazebo 仿真真值。
+Panels:
+  - Class: rviz/Displays
+    Name: 显示
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /MID360 仿真点云1
+      Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Name: 仿真时间
+    SyncMode: 0
+    SyncSource: MID360 仿真点云
+Preferences:
+  PromptSaveOnExit: false
+Visualization Manager:
+  Class: ""
+  Enabled: true
+  Global Options:
+    Background Color: 30; 30; 35
+    Default Light: true
+    Fixed Frame: world
+    Frame Rate: 30
+  Name: root
+  Displays:
+    - Class: rviz/Grid
+      Name: 世界坐标参考网格
+      Enabled: true
+      Value: true
+      Alpha: 0.25
+      Cell Size: 2
+      Color: 110; 110; 120
+      Line Style:
+        Line Width: 0.02
+        Value: Lines
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 20
+      Reference Frame: <Fixed Frame>
+    - Class: rviz/RobotModel
+      Name: AlienGo 机器人
+      Enabled: true
+      Value: true
+      Alpha: 1
+      Collision Enabled: false
+      Visual Enabled: true
+      Robot Description: /robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+    - Class: rviz/PointCloud2
+      Name: MID360 仿真点云
+      Enabled: true
+      Value: true
+      Topic: /livox/lidar
+      Position Transformer: XYZ
+      Color Transformer: AxisColor
+      Axis: Z
+      Autocompute Value Bounds:
+        Value: true
+      Alpha: 1
+      Decay Time: 0
+      Queue Size: 2
+      Style: Points
+      Size (Pixels): 2
+      Size (m): 0.03
+      Selectable: true
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+    - Class: rviz/Image
+      Name: D435 彩色图像
+      Enabled: true
+      Value: true
+      Image Topic: /camera/color/image_raw
+      Transport Hint: raw
+      Queue Size: 2
+      Normalize Range: false
+    - Class: rviz/PointCloud2
+      Name: D435 彩色点云
+      Enabled: true
+      Value: true
+      Topic: /camera/depth/color/points
+      Position Transformer: XYZ
+      Color Transformer: RGB8
+      Alpha: 1
+      Decay Time: 0
+      Queue Size: 2
+      Style: Points
+      Size (Pixels): 2
+      Size (m): 0.01
+      Selectable: true
+      Use Fixed Frame: true
+    - Class: rviz/TF
+      Name: 坐标系（按需开启）
+      Enabled: false
+      Value: false
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Marker Alpha: 1
+      Marker Scale: 0.3
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Update Interval: 0
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Name: MID360 点云视角
+      Target Frame: <Fixed Frame>
+      Distance: 20
+      Pitch: 0.6
+      Yaw: 0.8
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Near Clip Distance: 0.01
+      Invert Z Axis: false
+    Saved: ~
+Window Geometry:
+  Width: 1920
+  Height: 1080
+  Hide Left Dock: false
+  Hide Right Dock: true

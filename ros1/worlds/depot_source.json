@@ -1,0 +1,36 @@
+{
+  "name": "Depot",
+  "owner": "OpenRobotics",
+  "version": 6,
+  "source_url": "https://app.gazebosim.org/OpenRobotics/fuel/models/Depot",
+  "metadata_url": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot",
+  "archive_url": "https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot/6/Depot.zip",
+  "archive": "downloads/depot-v6.zip",
+  "archive_bytes": 81963314,
+  "sha256": "760ac4a94293a39aaf878243e927608bebdea006ea97e55d95264007548f07de",
+  "path": "references/fuel_models/Depot",
+  "license": {
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "authors": [
+      "Rafi Abdullah",
+      "Louise Poubel"
+    ],
+    "attribution_file": "references/fuel_models/Depot/model.config"
+  },
+  "derived_model": "ros1/worlds/models/Depot",
+  "world": "ros1/worlds/depot.world",
+  "generator": "scripts/prepare_depot_world.py",
+  "ground_z": 0,
+  "spawn": {
+    "x": -5,
+    "y": 0,
+    "z": 0.6,
+    "yaw": 0
+  },
+  "building_dimensions_m": {
+    "x": 30.6,
+    "y": 15.6
+  },
+  "walkable_ground": "Original FLOOR mesh; duplicate plane removed, includes mezzanine"
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Invisible sensor frames: the AlienGo mesh already contains its cameras.
+       The nominal RealSense extrinsics below are not a hardware calibration. -->
+  <xacro:macro name="d435_camera_frame" params="name y:=0">
+    <link name="d435_${name}_frame"/>
+    <joint name="d435_${name}_joint" type="fixed">
+      <parent link="d435_link"/>
+      <child link="d435_${name}_frame"/>
+      <origin xyz="0 ${y} 0" rpy="0 0 0"/>
+    </joint>
+    <link name="d435_${name}_optical_frame"/>
+    <joint name="d435_${name}_optical_joint" type="fixed">
+      <parent link="d435_${name}_frame"/>
+      <child link="d435_${name}_optical_frame"/>
+      <!-- Physical +X forward becomes optical +Z forward, +X right, +Y down. -->
+      <origin xyz="0 0 0" rpy="${-pi / 2} 0 ${-pi / 2}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="d435_gazebo_sensor"
+               params="name frame type width height hfov rate near far format">
+    <!-- Gazebo folds these massless fixed links into trunk while preserving
+         each sensor's complete pose, including the rotated stereo baseline. -->
+    <gazebo reference="${frame}">
+      <sensor name="d435_${name}" type="${type}">
+        <always_on>true</always_on>
+        <update_rate>${rate}</update_rate>
+        <visualize>false</visualize>
+        <camera name="d435_${name}">
+          <horizontal_fov>${hfov}</horizontal_fov>
+          <image>
+            <width>${width}</width>
+            <height>${height}</height>
+            <format>${format}</format>
+          </image>
+          <clip><near>${near}</near><far>${far}</far></clip>
+        </camera>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="d435_camera"
+               params="x y z roll pitch yaw depth_width depth_height color_width color_height rate depth_hfov color_hfov min_depth max_depth color_offset_y stereo_baseline">
+    <!-- d435_link is the nominal depth origin, not a screw-mount/body origin.
+         No mass, collision, or visual geometry is added to the robot. -->
+    <link name="d435_link"/>
+    <joint name="d435_joint" type="fixed">
+      <parent link="trunk"/>
+      <child link="d435_link"/>
+      <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${yaw}"/>
+    </joint>
+    <xacro:d435_camera_frame name="depth"/>
+    <xacro:d435_camera_frame name="color" y="${color_offset_y}"/>
+    <xacro:d435_camera_frame name="infra1"/>
+    <xacro:d435_camera_frame name="infra2" y="${-float(stereo_baseline)}"/>
+
+    <xacro:d435_gazebo_sensor name="depth" frame="d435_depth_frame" type="depth"
+      width="${depth_width}" height="${depth_height}" hfov="${depth_hfov}"
+      rate="${rate}" near="${min_depth}" far="${max_depth}" format="R8G8B8"/>
+    <!-- RGB has a separate imager and may see beyond the useful depth range. -->
+    <xacro:d435_gazebo_sensor name="color" frame="d435_color_frame" type="camera"
+      width="${color_width}" height="${color_height}" hfov="${color_hfov}"
+      rate="${rate}" near="0.1" far="100" format="R8G8B8"/>
+    <xacro:d435_gazebo_sensor name="ired1" frame="d435_infra1_frame" type="camera"
+      width="${depth_width}" height="${depth_height}" hfov="${depth_hfov}"
+      rate="${rate}" near="${min_depth}" far="${max_depth}" format="L8"/>
+    <xacro:d435_gazebo_sensor name="ired2" frame="d435_infra2_frame" type="camera"
+      width="${depth_width}" height="${depth_height}" hfov="${depth_hfov}"
+      rate="${rate}" near="${min_depth}" far="${max_depth}" format="L8"/>
+
+    <gazebo>
+      <!-- PAL's model plugin uses its name as the ROS namespace and looks up
+           the four sensor names through prefix. Do not add robotNamespace. -->
+      <plugin name="camera" filename="librealsense_gazebo_plugin.so">
+        <prefix>d435_</prefix>
+        <depthUpdateRate>${rate}</depthUpdateRate>
+        <colorUpdateRate>${rate}</colorUpdateRate>
+        <infraredUpdateRate>${rate}</infraredUpdateRate>
+        <depthTopicName>depth/image_rect_raw</depthTopicName>
+        <depthCameraInfoTopicName>depth/camera_info</depthCameraInfoTopicName>
+        <colorTopicName>color/image_raw</colorTopicName>
+        <colorCameraInfoTopicName>color/camera_info</colorCameraInfoTopicName>
+        <infrared1TopicName>infra1/image_rect_raw</infrared1TopicName>
+        <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
+        <infrared2TopicName>infra2/image_rect_raw</infrared2TopicName>
+        <infrared2CameraInfoTopicName>infra2/camera_info</infrared2CameraInfoTopicName>
+        <depthOpticalframeName>d435_depth_optical_frame</depthOpticalframeName>
+        <colorOpticalframeName>d435_color_optical_frame</colorOpticalframeName>
+        <infrared1OpticalframeName>d435_infra1_optical_frame</infrared1OpticalframeName>
+        <infrared2OpticalframeName>d435_infra2_optical_frame</infrared2OpticalframeName>
+        <rangeMinDepth>${min_depth}</rangeMinDepth>
+        <rangeMaxDepth>${max_depth}</rangeMaxDepth>
+        <pointCloud>true</pointCloud>
+        <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+        <pointCloudCutoff>${min_depth}</pointCloudCutoff>
+        <pointCloudCutoffMax>${max_depth}</pointCloudCutoffMax>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+</robot>

@@ -1,0 +1,442 @@
+--- realsense_gazebo_plugin/CMakeLists.txt
++++ realsense_gazebo_plugin/CMakeLists.txt
+@@ -37,6 +37,12 @@
+     src/gazebo_ros_realsense.cpp
+     )
+ 
++# AlienGo learning modification: optimize per-point projection in default catkin
++# builds while preserving an explicitly requested CMAKE_BUILD_TYPE.
++if(NOT CMAKE_BUILD_TYPE)
++    target_compile_options(${PROJECT_NAME} PRIVATE -O2)
++endif()
++
+ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+ add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+ 
+--- /dev/null
++++ realsense_gazebo_plugin/include/realsense_gazebo_plugin/d435_projection.h
+@@ -0,0 +1,101 @@
++// Copyright 2026 AlienGo learning contributors
++// SPDX-License-Identifier: Apache-2.0
++#ifndef REALSENSE_GAZEBO_D435_PROJECTION_H
++#define REALSENSE_GAZEBO_D435_PROJECTION_H
++
++#include <array>
++#include <cmath>
++#include <cstdint>
++#include <limits>
++#include <string>
++
++namespace gazebo {
++namespace d435 {
++
++using Point = std::array<double, 3>;
++
++inline const char *ImageEncoding(const std::string &format) {
++  if (format == "R8G8B8" || format == "RGB_INT8")
++    return "rgb8";
++  if (format == "L8" || format == "L_INT8")
++    return "8UC1";
++  return nullptr;
++}
++
++struct Pinhole {
++  unsigned int width, height;
++  double fx, fy, cx, cy;
++
++  static Pinhole FromImage(unsigned int width, unsigned int height, double hfov) {
++    const double focal = 0.5 * width / std::tan(0.5 * hfov);
++    return {width, height, focal, focal, 0.5 * width, 0.5 * height};
++  }
++};
++
++struct RigidTransform {
++  // Row-major rotation and translation from depth optical to color optical.
++  std::array<double, 9> rotation{{1, 0, 0, 0, 1, 0, 0, 0, 1}};
++  Point translation{{0, 0, 0}};
++};
++
++struct Pixel {
++  int u, v;
++};
++
++inline RigidTransform OpticalTransform(const RigidTransform &physical) {
++  // Columns are the optical x/right, y/down, z/forward axes in physical space.
++  const double basis[] = {0, 0, 1, -1, 0, 0, 0, -1, 0};
++  RigidTransform optical;
++  optical.rotation.fill(0);
++  optical.translation.fill(0);
++  for (unsigned int row = 0; row < 3; ++row) {
++    for (unsigned int i = 0; i < 3; ++i) {
++      optical.translation[row] += basis[3 * i + row] * physical.translation[i];
++      for (unsigned int column = 0; column < 3; ++column)
++        for (unsigned int j = 0; j < 3; ++j)
++          optical.rotation[3 * row + column] += basis[3 * i + row] *
++              physical.rotation[3 * i + j] * basis[3 * j + column];
++    }
++  }
++  return optical;
++}
++
++inline bool Unproject(const Pinhole &camera, unsigned int u, unsigned int v,
++                      double depth, Point &point) {
++  if (!std::isfinite(depth) || depth <= 0 || camera.fx <= 0 || camera.fy <= 0)
++    return false;
++  point = {{(u - camera.cx) * depth / camera.fx,
++            (v - camera.cy) * depth / camera.fy, depth}};
++  return true;
++}
++
++inline bool ProjectColor(const Pinhole &camera, const RigidTransform &transform,
++                         const Point &point, Pixel &pixel) {
++  Point color = transform.translation;
++  for (unsigned int row = 0; row < 3; ++row)
++    for (unsigned int column = 0; column < 3; ++column)
++      color[row] += transform.rotation[3 * row + column] * point[column];
++  if (!std::isfinite(color[0]) || !std::isfinite(color[1]) ||
++      !std::isfinite(color[2]) || color[2] <= 0)
++    return false;
++  const double u = camera.fx * color[0] / color[2] + camera.cx;
++  const double v = camera.fy * color[1] / color[2] + camera.cy;
++  if (!std::isfinite(u) || !std::isfinite(v) ||
++      u < 0 || v < 0 || u >= camera.width || v >= camera.height)
++    return false;
++  pixel = {static_cast<int>(std::lround(u)), static_cast<int>(std::lround(v))};
++  return pixel.u >= 0 && pixel.v >= 0 &&
++         static_cast<unsigned int>(pixel.u) < camera.width &&
++         static_cast<unsigned int>(pixel.v) < camera.height;
++}
++
++inline uint16_t DepthMillimeters(float depth, float minimum, float maximum) {
++  if (!std::isfinite(depth) || depth <= 0 || depth < minimum || depth > maximum ||
++      depth > 0.001 * std::numeric_limits<uint16_t>::max())
++    return 0;
++  return static_cast<uint16_t>(std::lround(depth * 1000.0));
++}
++
++}  // namespace d435
++}  // namespace gazebo
++#endif
+--- realsense_gazebo_plugin/include/realsense_gazebo_plugin/gazebo_ros_realsense.h
++++ realsense_gazebo_plugin/include/realsense_gazebo_plugin/gazebo_ros_realsense.h
+@@ -1,3 +1,4 @@
++// AlienGo learning modification (2026): Keep RGB capture state separate from IR callbacks.
+ #ifndef _GAZEBO_ROS_REALSENSE_PLUGIN_
+ #define _GAZEBO_ROS_REALSENSE_PLUGIN_
+ 
+@@ -13,6 +14,7 @@
+ #include <image_transport/image_transport.h>
+ 
+ #include <memory>
++#include <mutex>
+ #include <string>
+ 
+ namespace gazebo {
+@@ -63,8 +65,15 @@
+ 
+   /// \brief ROS image messages
+ protected:
+-  sensor_msgs::Image image_msg_, depth_msg_;
++  sensor_msgs::Image depth_msg_;
+   sensor_msgs::PointCloud2 pointcloud_msg_;
++
++private:
++  // IR callbacks must never overwrite the RGB image used to color the cloud.
++  std::mutex color_mutex_;
++  sensor_msgs::Image color_msg_;
++  ignition::math::Pose3d color_pose_;
++  bool color_ready_ = false;
+ };
+ }
+ #endif /* _GAZEBO_ROS_REALSENSE_PLUGIN_ */
+--- realsense_gazebo_plugin/src/RealSensePlugin.cpp
++++ realsense_gazebo_plugin/src/RealSensePlugin.cpp
+@@ -1,3 +1,4 @@
++// AlienGo learning modification (2026): Validate finite depth and convert to millimeters.
+ /*
+ // Copyright (c) 2016 Intel Corporation
+ //
+@@ -15,6 +16,7 @@
+ */
+ 
+ #include "realsense_gazebo_plugin/RealSensePlugin.h"
++#include "realsense_gazebo_plugin/d435_projection.h"
+ #include <gazebo/physics/physics.hh>
+ #include <gazebo/rendering/DepthCamera.hh>
+ #include <gazebo/sensors/sensors.hh>
+@@ -250,15 +252,8 @@
+   // Convert Float depth data to RealSense depth data
+   const float *depthDataFloat = this->depthCam->DepthData();
+   for (unsigned int i = 0; i < imageSize; ++i) {
+-    // Check clipping and overflow
+-    if (depthDataFloat[i] < rangeMinDepth_ ||
+-        depthDataFloat[i] > rangeMaxDepth_ ||
+-        depthDataFloat[i] > DEPTH_SCALE_M * UINT16_MAX ||
+-        depthDataFloat[i] < 0) {
+-      this->depthMap[i] = 0;
+-    } else {
+-      this->depthMap[i] = (uint16_t)(depthDataFloat[i] / DEPTH_SCALE_M);
+-    }
++    this->depthMap[i] = d435::DepthMillimeters(
++        depthDataFloat[i], rangeMinDepth_, rangeMaxDepth_);
+   }
+ 
+   // Pack realsense scaled depth map
+--- realsense_gazebo_plugin/src/gazebo_ros_realsense.cpp
++++ realsense_gazebo_plugin/src/gazebo_ros_realsense.cpp
+@@ -1,4 +1,6 @@
++// AlienGo learning modification (2026): Project RGB using distinct optics; correct CameraInfo and RGB cache.
+ #include "realsense_gazebo_plugin/gazebo_ros_realsense.h"
++#include "realsense_gazebo_plugin/d435_projection.h"
+ #include <sensor_msgs/fill_image.h>
+ #include <sensor_msgs/point_cloud2_iterator.h>
+ 
+@@ -74,20 +76,24 @@
+       };
+   const auto image_pub = camera_publishers.at(camera_id);
+ 
++  sensor_msgs::Image image_msg;
++
+   // copy data into image
+-  this->image_msg_.header.frame_id =
++  image_msg.header.frame_id =
+       this->cameraParamsMap_[camera_id].optical_frame;
+-  this->image_msg_.header.stamp.sec = current_time.sec;
+-  this->image_msg_.header.stamp.nsec = current_time.nsec;
++  image_msg.header.stamp.sec = current_time.sec;
++  image_msg.header.stamp.nsec = current_time.nsec;
+ 
+   // set image encoding
+-  const std::map<std::string, std::string> supported_image_encodings = {
+-      {"RGB_INT8", sensor_msgs::image_encodings::RGB8},
+-      {"L_INT8", sensor_msgs::image_encodings::TYPE_8UC1}};
+-  const auto pixel_format = supported_image_encodings.at(cam->ImageFormat());
++  const auto pixel_format = d435::ImageEncoding(cam->ImageFormat());
++  if (!pixel_format) {
++    ROS_ERROR_STREAM_THROTTLE(1.0, "Unsupported Gazebo image format '"
++        << cam->ImageFormat() << "' for camera " << cam->Name());
++    return;
++  }
+ 
+   // copy from simulation image to ROS msg
+-  fillImage(this->image_msg_, pixel_format, cam->ImageHeight(),
++  fillImage(image_msg, pixel_format, cam->ImageHeight(),
+             cam->ImageWidth(), cam->ImageDepth() * cam->ImageWidth(),
+             reinterpret_cast<const void *>(cam->ImageData()));
+ 
+@@ -98,112 +104,102 @@
+       {IRED2_CAMERA_NAME, this->ired2Cam},
+   };
+ 
++  if (camera_id == COLOR_CAMERA_NAME) {
++    std::lock_guard<std::mutex> lock(this->color_mutex_);
++    this->color_msg_ = image_msg;
++    this->color_pose_ = cam->WorldPose();
++    this->color_ready_ = true;
++  }
++
+   // publish to ROS
+   auto camera_info_msg =
+-      cameraInfo(this->image_msg_, cameras.at(camera_id)->HFOV().Radian());
+-  image_pub->publish(this->image_msg_, camera_info_msg);
+-}
+-
+-// Referenced from gazebo_plugins
+-// https://github.com/ros-simulation/gazebo_ros_pkgs/blob/kinetic-devel/gazebo_plugins/src/gazebo_ros_openni_kinect.cpp#L302
+-// Fill depth information
++      cameraInfo(image_msg, cameras.at(camera_id)->HFOV().Radian());
++  image_pub->publish(image_msg, camera_info_msg);
++}
++
++// Keep depth XYZ in the depth optical frame and project its color into the
++// separately positioned RGB camera. Points outside the RGB view remain black.
+ bool GazeboRosRealsense::FillPointCloudHelper(sensor_msgs::PointCloud2 &point_cloud_msg,
+                                               uint32_t rows_arg, uint32_t cols_arg,
+                                               uint32_t step_arg, void *data_arg)
+ {
+-  sensor_msgs::PointCloud2Modifier pcd_modifier(point_cloud_msg);
+-  pcd_modifier.setPointCloud2FieldsByString(2, "xyz", "rgb");
+-  // convert to flat array shape, we need to reconvert later
+-  pcd_modifier.resize(rows_arg * cols_arg);
++  sensor_msgs::PointCloud2Modifier modifier(point_cloud_msg);
++  modifier.setPointCloud2FieldsByString(2, "xyz", "rgb");
++  modifier.resize(rows_arg * cols_arg);
+   point_cloud_msg.is_dense = true;
+ 
+-  sensor_msgs::PointCloud2Iterator<float> iter_x(pointcloud_msg_, "x");
+-  sensor_msgs::PointCloud2Iterator<float> iter_y(pointcloud_msg_, "y");
+-  sensor_msgs::PointCloud2Iterator<float> iter_z(pointcloud_msg_, "z");
+-  sensor_msgs::PointCloud2Iterator<uint8_t> iter_rgb(pointcloud_msg_, "rgb");
+-
+-  float *toCopyFrom = (float *)data_arg;
+-  int index = 0;
+-
+-  double hfov = this->depthCam->HFOV().Radian();
+-  double fl = ((double)this->depthCam->ImageWidth()) / (2.0 * tan(hfov / 2.0));
+-
+-  // convert depth to point cloud
+-  for (uint32_t j = 0; j < rows_arg; j++)
++  sensor_msgs::Image color_image;
++  ignition::math::Pose3d color_pose;
++  bool have_color;
+   {
+-    double pAngle;
+-    if (rows_arg > 1)
+-      pAngle = atan2((double)j - 0.5 * (double)(rows_arg - 1), fl);
+-    else
+-      pAngle = 0.0;
+-
+-    for (uint32_t i = 0; i < cols_arg; i++, ++iter_x, ++iter_y, ++iter_z, ++iter_rgb)
+-    {
+-      double yAngle;
+-      if (cols_arg > 1)
+-        yAngle = atan2((double)i - 0.5 * (double)(cols_arg - 1), fl);
+-      else
+-        yAngle = 0.0;
+-
+-      double depth = toCopyFrom[index++];  // + 0.0*this->myParent->GetNearClip();
+-
+-      if (depth > pointCloudCutOff_ && depth < pointCloudCutOffMax_)
+-      {
+-        // in optical frame
+-        // hardcoded rotation rpy(-M_PI/2, 0, -M_PI/2) is built-in
+-        // to urdf, where the *_optical_frame should have above relative
+-        // rotation from the physical camera *_frame
+-        *iter_x = depth * tan(yAngle);
+-        *iter_y = depth * tan(pAngle);
+-        *iter_z = depth;
++    std::lock_guard<std::mutex> lock(this->color_mutex_);
++    have_color = this->color_ready_;
++    if (have_color) {
++      color_image = this->color_msg_;
++      color_pose = this->color_pose_;
++    }
++  }
++  have_color = have_color && color_image.encoding == sensor_msgs::image_encodings::RGB8 &&
++      color_image.step >= color_image.width * 3 &&
++      color_image.data.size() >= color_image.step * color_image.height;
++
++  const auto depth_intrinsics = d435::Pinhole::FromImage(
++      cols_arg, rows_arg, this->depthCam->HFOV().Radian());
++  const auto color_intrinsics = d435::Pinhole::FromImage(
++      color_image.width, color_image.height, this->colorCam->HFOV().Radian());
++  d435::RigidTransform depth_to_color;
++  if (have_color) {
++    // Camera WorldPose uses physical x-forward/y-left/z-up axes. Convert its
++    // relative transform to optical x-right/y-down/z-forward on both sides.
++    const auto physical = color_pose.Inverse() * this->depthCam->WorldPose();
++    d435::RigidTransform relative;
++    relative.translation = {{physical.Pos().X(), physical.Pos().Y(), physical.Pos().Z()}};
++    const ignition::math::Vector3d physical_basis[] = {
++        {1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
++    for (unsigned int column = 0; column < 3; ++column) {
++      const auto axis = physical.Rot().RotateVector(physical_basis[column]);
++      relative.rotation[column] = axis.X();
++      relative.rotation[3 + column] = axis.Y();
++      relative.rotation[6 + column] = axis.Z();
++    }
++    depth_to_color = d435::OpticalTransform(relative);
++  }
++
++  sensor_msgs::PointCloud2Iterator<float> x(point_cloud_msg, "x");
++  sensor_msgs::PointCloud2Iterator<float> y(point_cloud_msg, "y");
++  sensor_msgs::PointCloud2Iterator<float> z(point_cloud_msg, "z");
++  sensor_msgs::PointCloud2Iterator<uint8_t> red(point_cloud_msg, "r");
++  sensor_msgs::PointCloud2Iterator<uint8_t> green(point_cloud_msg, "g");
++  sensor_msgs::PointCloud2Iterator<uint8_t> blue(point_cloud_msg, "b");
++  const auto depth_data = static_cast<const float *>(data_arg);
++  for (uint32_t row = 0; row < rows_arg; ++row) {
++    for (uint32_t column = 0; column < cols_arg;
++         ++column, ++x, ++y, ++z, ++red, ++green, ++blue) {
++      const float depth = depth_data[row * cols_arg + column];
++      d435::Point point;
++      const bool valid = depth > pointCloudCutOff_ && depth < pointCloudCutOffMax_ &&
++          d435::Unproject(depth_intrinsics, column, row, depth, point);
++      *red = *green = *blue = 0;
++      if (!valid) {
++        *x = *y = *z = std::numeric_limits<float>::quiet_NaN();
++        point_cloud_msg.is_dense = false;
++        continue;
+       }
+-      else  // point in the unseeable range
+-      {
+-        *iter_x = *iter_y = *iter_z = std::numeric_limits<float>::quiet_NaN();
+-        point_cloud_msg.is_dense = false;
+-      }
+-
+-      // put image color data for each point
+-      uint8_t *image_src = (uint8_t *)(&(this->image_msg_.data[0]));
+-      if (this->image_msg_.data.size() == rows_arg * cols_arg * 3)
+-      {
+-        // color
+-        if (this->image_msg_.encoding == sensor_msgs::image_encodings::RGB8) {
+-          iter_rgb[2] = image_src[i * 3 + j * cols_arg * 3 + 0];
+-          iter_rgb[1] = image_src[i * 3 + j * cols_arg * 3 + 1];
+-          iter_rgb[0] = image_src[i * 3 + j * cols_arg * 3 + 2];
+-        }
+-        else if (this->image_msg_.encoding == sensor_msgs::image_encodings::BGR8) {
+-          iter_rgb[0] = image_src[i * 3 + j * cols_arg * 3 + 0];
+-          iter_rgb[1] = image_src[i * 3 + j * cols_arg * 3 + 1];
+-          iter_rgb[2] = image_src[i * 3 + j * cols_arg * 3 + 2];
+-        }
+-        else {
+-          throw std::runtime_error("unsupported colour encoding: " + this->image_msg_.encoding);
+-        }
+-      }
+-      else if (this->image_msg_.data.size() == rows_arg * cols_arg)
+-      {
+-        // mono (or bayer?  @todo; fix for bayer)
+-        iter_rgb[0] = image_src[i + j * cols_arg];
+-        iter_rgb[1] = image_src[i + j * cols_arg];
+-        iter_rgb[2] = image_src[i + j * cols_arg];
+-      }
+-      else
+-      {
+-        // no image
+-        iter_rgb[0] = 0;
+-        iter_rgb[1] = 0;
+-        iter_rgb[2] = 0;
++      *x = point[0];
++      *y = point[1];
++      *z = point[2];
++      d435::Pixel pixel;
++      if (have_color && d435::ProjectColor(color_intrinsics, depth_to_color, point, pixel)) {
++        const auto offset = pixel.v * color_image.step + pixel.u * 3;
++        *red = color_image.data[offset];
++        *green = color_image.data[offset + 1];
++        *blue = color_image.data[offset + 2];
+       }
+     }
+   }
+-
+-  // reconvert to original height and width after the flat reshape
+   point_cloud_msg.height = rows_arg;
+   point_cloud_msg.width = cols_arg;
+-  point_cloud_msg.row_step = point_cloud_msg.point_step * point_cloud_msg.width;
+-
++  point_cloud_msg.row_step = point_cloud_msg.point_step * cols_arg;
+   return true;
+ }
+ 
+@@ -270,12 +266,15 @@
+   info_msg.height = image.height;
+   info_msg.width = image.width;
+ 
+-  float focal = 0.5 * image.width / tan(0.5 * horizontal_fov);
+-
+-  info_msg.K[0] = focal;
+-  info_msg.K[4] = focal;
+-  info_msg.K[2] = info_msg.width * 0.5;
+-  info_msg.K[5] = info_msg.height * 0.5;
++  const auto intrinsics = gazebo::d435::Pinhole::FromImage(
++      image.width, image.height, horizontal_fov);
++  info_msg.D.assign(5, 0.0);
++  info_msg.R[0] = info_msg.R[4] = info_msg.R[8] = 1.0;
++
++  info_msg.K[0] = intrinsics.fx;
++  info_msg.K[4] = intrinsics.fy;
++  info_msg.K[2] = intrinsics.cx;
++  info_msg.K[5] = intrinsics.cy;
+   info_msg.K[8] = 1.;
+ 
+   info_msg.P[0] = info_msg.K[0];

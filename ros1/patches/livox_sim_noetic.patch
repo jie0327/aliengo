@@ -1,0 +1,105 @@
+--- livox_laser_simulation/CMakeLists.txt
++++ livox_laser_simulation/CMakeLists.txt
+@@ -13,7 +13,7 @@
+ include_directories(${GAZEBO_INCLUDE_DIRS})
+ 
+ #To solve the error which gazebo does not handle the include file well, we must add this line.
+-include_directories(/usr/include/gazebo-7/gazebo)
++include_directories(/usr/include/gazebo-11/gazebo)
+ 
+ link_directories(${GAZEBO_LIBRARY_DIRS})
+ 
+@@ -35,4 +35,4 @@
+ add_library(livox_laser_simulation SHARED src/livox_points_plugin.cpp src/livox_ode_multiray_shape.cpp)
+ target_link_libraries(livox_laser_simulation ${catkin_LIBRARIES} RayPlugin)
+ 
+-target_link_libraries(livox_laser_simulation libprotobuf.so.9)
++target_link_libraries(livox_laser_simulation ${GAZEBO_LIBRARIES} protobuf)
+--- livox_laser_simulation/src/livox_points_plugin.cpp
++++ livox_laser_simulation/src/livox_points_plugin.cpp
+@@ -60,7 +60,7 @@
+ 
+     raySensor = _parent;
+     auto sensor_pose = raySensor->Pose();
+-    SendRosTf(sensor_pose, raySensor->ParentName(), raySensor->Name());
++    // Robot state publisher owns the sensor TF.
+ 
+     node = transport::NodePtr(new transport::Node());
+     node->Init(raySensor->WorldName());
+@@ -117,7 +117,7 @@
+         msgs::LaserScan *scan = laserMsg.mutable_scan();
+         InitializeScan(scan);
+ 
+-        SendRosTf(parentEntity->WorldPose(), world->Name(), raySensor->ParentName());
++        // Robot state publisher owns the sensor TF.
+ 
+         auto rayCount = RayCount();
+         auto verticalRayCount = VerticalRayCount();
+@@ -128,7 +128,7 @@
+ 
+         sensor_msgs::PointCloud scan_point;
+         scan_point.header.stamp = ros::Time::now();
+-        scan_point.header.frame_id = raySensor->Name();
++        scan_point.header.frame_id = sdfPtr->Get<std::string>("frame_name");
+         auto &scan_points = scan_point.points;
+ 
+         for (auto &pair : points_pair) {
+@@ -141,10 +141,8 @@
+             //   auto index = (verticalRayCount - verticle_index - 1) * rayCount + horizon_index;
+                 auto range = rayShape->GetRange(pair.first);
+                 auto intensity = rayShape->GetRetro(pair.first);
+-                if (range >= RangeMax()) {
+-                    range = 0;
+-                } else if (range <= RangeMin()) {
+-                    range = 0;
++                if (range >= RangeMax() || range <= RangeMin()) {
++                    continue;  // No return: do not fabricate a point at the sensor origin.
+                 }
+                 //scan->set_ranges(index, range);
+                 //scan->set_intensities(index, intensity);
+@@ -198,7 +196,7 @@
+         }
+         ray_index++;
+     }
+-    currStartIndex += samplesStep;
++    currStartIndex = (currStartIndex + samplesStep) % maxPointSize;
+ }
+ 
+ void LivoxPointsPlugin::InitializeScan(msgs::LaserScan *&scan) {
+--- livox_laser_simulation/include/livox_laser_simulation/livox_ode_multiray_shape.h
++++ livox_laser_simulation/include/livox_laser_simulation/livox_ode_multiray_shape.h
+@@ -7,7 +7,7 @@
+ #include <gazebo/physics/MultiRayShape.hh>
+ #include <gazebo/util/system.hh>
+ #include <gazebo/ode/common.h>
+-#include <ignition/math4/ignition/math.hh>
++#include <ignition/math.hh>
+ 
+ namespace gazebo{
+ namespace physics{
+--- livox_laser_simulation/src/livox_ode_multiray_shape.cpp
++++ livox_laser_simulation/src/livox_ode_multiray_shape.cpp
+@@ -12,7 +12,7 @@
+ #include <gazebo/physics/ode/ODERayShape.hh>
+ #include <gazebo/physics/ode/ODEMultiRayShape.hh>
+ #include "livox_laser_simulation/livox_ode_multiray_shape.h"
+-#include <ignition/math4/ignition/math.hh>
++#include <ignition/math.hh>
+ 
+ using namespace gazebo;
+ using namespace physics;
+--- livox_laser_simulation/include/livox_laser_simulation/csv_reader.hpp
++++ livox_laser_simulation/include/livox_laser_simulation/csv_reader.hpp
+@@ -18,9 +18,9 @@
+         if (file_stream.is_open()) {
+             std::string header;
+             std::getline(file_stream, header, '\n');
+-            while (!file_stream.eof()) {
+-                std::string line_str;
+-                std::getline(file_stream, line_str, '\n');
++            std::string line_str;
++            while (std::getline(file_stream, line_str)) {
++                if (line_str.empty()) continue;
+                 std::stringstream line_stream;
+                 line_stream << line_str;
+                 std::vector<double> data;

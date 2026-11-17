@@ -1,0 +1,13 @@
+--- super_lio/src/lio/super_lio.cpp
++++ super_lio/src/lio/super_lio.cpp
+@@ -258,6 +258,10 @@
+   namespace fs = std::filesystem;
+ 
+   std::string pcd_folder = g_save_map_dir + "/PCD";
++  if (!fs::exists(pcd_folder)) {
++    LOG(INFO) << YELLOW << " ---> 未积累地图帧，跳过保存" << RESET;
++    return;
++  }
+   std::string output_map_name = g_save_map_dir + "/" + g_map_name;
+ 
+   LOG(INFO) << YELLOW << " ---> Merging PCD fragments in: " << pcd_folder << RESET;

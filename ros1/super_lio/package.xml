@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>aliengo_super_lio</name><version>0.1.0</version>
+  <description>ROS1 Super-LIO integration for the AlienGo MID360 simulation</description>
+  <maintainer email="maintainer@example.com">AlienGo Learning</maintainer>
+  <license>GPL-3.0</license>
+  <exec_depend>super_lio</exec_depend><exec_depend>rospy</exec_depend>
+  <exec_depend>tf</exec_depend><exec_depend>tf2_ros</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend><exec_depend>nav_msgs</exec_depend>
+  <exec_depend>rviz</exec_depend><exec_depend>python3-numpy</exec_depend>
+</package>
